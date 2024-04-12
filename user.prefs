@@ -1,0 +1,10 @@
+{
+    "tempUnit": {
+        "type": "char",
+        "value": "c"
+    },
+    "test": {
+        "type": "string",
+        "value": "Hello World"
+    }
+}

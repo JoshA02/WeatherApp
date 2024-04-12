@@ -21,8 +21,6 @@ UI::UI()
 }
 
 void UI::displayMenu(std::vector<MenuItem> menuItems) {
-	std::cout << menuItems.size() << std::endl;
-
 	clearScreen();
 	
 	for (int i = 0; i < menuItems.size(); i++) {

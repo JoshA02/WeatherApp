@@ -21,11 +21,13 @@
   <ItemGroup>
     <ClCompile Include="src\API.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\StorageManager.cpp" />
     <ClCompile Include="src\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\API.h" />
     <ClInclude Include="src\Location.h" />
+    <ClInclude Include="src\StorageManager.h" />
     <ClInclude Include="src\UI.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
