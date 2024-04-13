@@ -1,6 +1,8 @@
 #pragma once
 
 #include "iostream"
+#include <list>
+#include <fstream>
 
 class PreferenceNotFoundException : public std::exception {
 private:
@@ -30,8 +32,8 @@ class InvalidPreferenceValueException : public std::exception {
 private:
 	std::string message;
 public:
-	InvalidPreferenceValueException(std::string key, std::string expectedType) {
-		this->message = "The value for preference key '" + key + "' is not a valid " + expectedType + ".";
+	InvalidPreferenceValueException(std::string key, std::string expectedType, std::string value) {
+		this->message = "The value for preference key '" + key + "'(" + value + ") is not a valid " + expectedType + ".";
 	}
 	const char* what() const throw() {
 		return message.c_str();
@@ -49,6 +51,10 @@ public:
 
 	void setPreference(std::string key, std::string value);
 
+	std::list<std::string> getPrefAllowedValues(std::string key);
 
+private:
+	std::string getPreferenceType(std::string key);
+	bool preferenceExists(std::string key);
 };
 

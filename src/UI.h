@@ -16,8 +16,10 @@ private:
 
 	std::vector<MenuItem> mainMenu;
 	std::vector<MenuItem> secondMenu;
+	std::vector<MenuItem> preferencesMenu;
 	
 	void displayMenu(std::vector<MenuItem>);
+	void updatePreference(std::string key);
 
 	#ifdef _WIN32
 	// Windows

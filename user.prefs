@@ -1,10 +1,56 @@
 {
-    "tempUnit": {
-        "type": "char",
-        "value": "c"
+    "forecastDays": {
+        "type": "int",
+        "value": 3
     },
-    "test": {
+    "pastDays": {
+        "type": "int",
+        "value": 1
+    },
+    "precipitationUnit": {
+        "allowedValues": [
+            "m",
+            "i"
+        ],
+        "type": "char",
+        "value": "m"
+    },
+    "pressureUnit": {
+        "allowedValues": [
+            "h",
+            "m",
+            "k"
+        ],
+        "type": "char",
+        "value": "h"
+    },
+    "tempUnit": {
+        "allowedValues": [
+            "c",
+            "f"
+        ],
+        "type": "char",
+        "value": "f"
+    },
+    "timeFormat": {
+        "allowedValues": [
+            12,
+            24
+        ],
+        "type": "int",
+        "value": 24
+    },
+    "timeZone": {
         "type": "string",
-        "value": "Hello World"
+        "value": "Europe/London"
+    },
+    "windSpeedUnit": {
+        "allowedValues": [
+            "k",
+            "m",
+            "n"
+        ],
+        "type": "char",
+        "value": "n"
     }
 }
