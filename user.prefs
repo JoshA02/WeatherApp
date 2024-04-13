@@ -1,11 +1,11 @@
 {
     "forecastDays": {
         "type": "int",
-        "value": 3
+        "value": 2
     },
     "pastDays": {
         "type": "int",
-        "value": 1
+        "value": 2
     },
     "precipitationUnit": {
         "allowedValues": [
@@ -30,7 +30,7 @@
             "f"
         ],
         "type": "char",
-        "value": "f"
+        "value": "c"
     },
     "timeFormat": {
         "allowedValues": [
@@ -41,6 +41,7 @@
         "value": 24
     },
     "timeZone": {
+        "message": "Valid time zones are: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones",
         "type": "string",
         "value": "Europe/London"
     },
@@ -51,6 +52,6 @@
             "n"
         ],
         "type": "char",
-        "value": "n"
+        "value": "m"
     }
 }

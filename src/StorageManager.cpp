@@ -9,6 +9,7 @@ std::string StorageManager::getPreference(std::string key)
 	if (!file.good()) throw PreferenceNotFoundException(key);
 
 	json data = json::parse(file);
+	file.close();
 
 	if (!preferenceExists(key)) throw PreferenceNotFoundException(key);
 	if (data[key].find("value") == data[key].end()) throw InvalidPreferenceException("The preference key '" + key + "' does not have a value. Please check the file.");
@@ -23,7 +24,7 @@ std::string StorageManager::getPreference(std::string key)
 		if (!value.is_string()) throw InvalidPreferenceValueException(key, type, value);
 	}
 	else if (type == "int") {
-		std::cout << value << " " << value.is_number_integer() << std::endl;
+		//std::cout << value << " " << value.is_number_integer() << std::endl;
 		if (!value.is_number_integer()) throw InvalidPreferenceValueException(key, type, value);
 	}
 	else if (type == "float") {
@@ -53,6 +54,7 @@ void StorageManager::setPreference(std::string key, std::string value)
 	if (!file.good()) throw PreferenceNotFoundException(key);
 
 	json data = json::parse(file);
+	file.close();
 
 	if (!preferenceExists(key)) throw PreferenceNotFoundException(key);
 	if (data[key].find("value") == data[key].end()) throw InvalidPreferenceException("The preference key '" + key + "' does not have a value. Please check the file.");
@@ -96,6 +98,7 @@ std::list<std::string> StorageManager::getPrefAllowedValues(std::string key)
 	if (!file.good()) throw PreferenceNotFoundException(key);
 	
 	json data = json::parse(file);
+	file.close();
 	
 	if (!preferenceExists(key)) throw PreferenceNotFoundException(key);
 	
@@ -111,7 +114,7 @@ std::list<std::string> StorageManager::getPrefAllowedValues(std::string key)
 		if (type == "string" || type == "char") {
 			x = x.substr(1, x.length() - 2);
 		}
-		std::cout << x << std::endl;
+		//std::cout << x << std::endl;
 		values.push_back(x);
 	}
 	
@@ -142,6 +145,7 @@ std::string StorageManager::getPreferenceType(std::string key)
 	if (!file.good()) throw PreferenceNotFoundException(key);
 
 	json data = json::parse(file);
+	file.close();
 
 	if(!preferenceExists(key)) throw PreferenceNotFoundException(key);
 	if (data[key].find("type") == data[key].end()) throw InvalidPreferenceException("The preference key '" + key + "' does not have an expected type. Please check the file.");
@@ -155,6 +159,7 @@ bool StorageManager::preferenceExists(std::string key)
 	if (!file.good()) throw PreferenceNotFoundException(key);
 
 	json data = json::parse(file);
+	file.close();
 
 	return data.find(key) != data.end();
 }

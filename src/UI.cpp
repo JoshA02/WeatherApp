@@ -13,7 +13,8 @@ UI::UI()
 	mainMenu = {
 		{"=== Main Menu ===", []() {}},
 		{"Set Preferences", [&]() { displayMenu(preferencesMenu); }},
-		{"Go to Second Menu", [&]() { displayMenu(secondMenu); }}
+		{"Go to Second Menu", [&]() { displayMenu(secondMenu); }},
+		{"Quit", [&]() { }}
 	};
 
 	secondMenu = {
@@ -21,17 +22,17 @@ UI::UI()
 		{"Option 1", []() { std::cout << "You selected option 1" << std::endl; }},
 		{"Go to Main Menu", [&]() { displayMenu(mainMenu); }}
 	};
-
+	
 	preferencesMenu = {
 		{"=== User Preferences ===", []() {}},
-		{"Temperature Unit (" + sm.getPreference("tempUnit") + ")", [&]() { updatePreference("tempUnit"); }},
-		{"Wind Speed Unit (" + sm.getPreference("windSpeedUnit") + ")", [&]() { updatePreference("windSpeedUnit"); }},
-		{"Pressure Unit (" + sm.getPreference("pressureUnit") + ")", [&]() { updatePreference("pressureUnit"); }},
-		{"Precipitation Unit (" + sm.getPreference("precipitationUnit") + ")", [&]() { updatePreference("precipitationUnit"); }},
-		{"Time Format (" + sm.getPreference("timeFormat") + ")", [&]() { updatePreference("timeFormat"); }},
-		{"Past Days (" + sm.getPreference("pastDays") + ")", [&]() { updatePreference("pastDays"); }},
-		{"Forecast Days (" + sm.getPreference("forecastDays") + ")", [&]() { updatePreference("forecastDays"); }},
-		{"Time Zone (" + sm.getPreference("timeZone") + ")", [&]() { updatePreference("timeZone"); }},
+		{"Temperature Unit (%PREF_tempUnit%)", [&]() { updatePreference("tempUnit"); }},
+		{"Wind Speed Unit (%PREF_windSpeedUnit%)", [&]() { updatePreference("windSpeedUnit"); }},
+		{"Pressure Unit (%PREF_pressureUnit%)", [&]() { updatePreference("pressureUnit"); }},
+		{"Precipitation Unit (%PREF_precipitationUnit%)", [&]() { updatePreference("precipitationUnit"); }},
+		{"Time Format (%PREF_timeFormat%)", [&]() { updatePreference("timeFormat"); }},
+		{"Past Days (%PREF_pastDays%)", [&]() { updatePreference("pastDays"); }},
+		{"Forecast Days (%PREF_forecastDays%)", [&]() { updatePreference("forecastDays"); }},
+		{"Time Zone (%PREF_timeZone%)", [&]() { updatePreference("timeZone"); }},
 		{"Go to Main Menu", [&]() { displayMenu(mainMenu); }}
 	};
 	
@@ -40,10 +41,23 @@ UI::UI()
 
 void UI::displayMenu(std::vector<MenuItem> menuItems) {
 	clearScreen();
-	
+
 	for (int i = 0; i < menuItems.size(); i++) {
-		if(i == 0) std::cout << menuItems[i].label << std::endl;
-		else std::cout << i << ". " << menuItems[i].label << std::endl;
+		std::string label = menuItems[i].label;
+		
+		if(i == 0) std::cout << label << std::endl;
+		else {
+			// check if label contains a %
+			if (label.find("%") != std::string::npos) {
+				// Replace placeholder strings, such as %PREF_tempUnit% with the actual preference value
+				StorageManager sm;
+				std::string prefValue = sm.getPreference(label.substr(label.find("%") + 6, label.find("%", label.find("%") + 1) - label.find("%") - 6));
+				label.replace(label.find("%"), label.find("%", label.find("%") + 1) - label.find("%") + 1, prefValue);
+			}
+
+
+			std::cout << i << ". " << label << std::endl;
+		}
 	}
 
 	std::string choiceStr;
@@ -67,16 +81,45 @@ void UI::updatePreference(std::string key) {
 	StorageManager sm;
 	
 	std::list<std::string> values = sm.getPrefAllowedValues(key);
+	
+	std::string introText = "=== Updating " + key + " - currently " + sm.getPreference(key) + " ===";
 
-	std::vector<MenuItem> thisMenu = {
-		{"=== Updating " + key + " ===\nPossible values: ", []() {}}
-		//{"Celsius (c)", [&sm, &key]() { sm.setPreference(key, "c"); }},
-		//{"Fahrenheit (f)", [&sm, &key]() { sm.setPreference(key, "f"); }}
-	};
+	std::vector<MenuItem> thisMenu = {};
+	if (values.size() > 0) thisMenu.push_back({ introText + "\nPossible values : ", []() {} });
 
-	for (std::string &value : values) {
-		thisMenu.push_back({ value, [&sm, &key, &value]() { sm.setPreference(key, value); } });
+
+	if (values.size() == 0) {
+		std::cout << introText << std::endl;
+		std::cout << "'back' to go back" << std::endl << std::endl;
+		
+		std::cout << "Enter new value: ";
+		std::string value;
+		std::cin >> value;
+
+		try {
+			if (value == "back") {
+				return displayMenu(preferencesMenu);
+			}
+			
+			if (value == "" || value.size() == 0) throw std::exception(); // TODO: In future, check if within min/max range if applicable
+
+			sm.setPreference(key, value);
+			return displayMenu(preferencesMenu);
+		}
+		catch (std::exception e) {
+			std::cout << "Invalid value. Press enter to dismiss" << std::endl;
+			_getch();
+			updatePreference(key); // Try again
+		}
+		displayMenu(mainMenu);
+		return;
 	}
 
+	for (std::string &value : values) {
+		thisMenu.push_back({ value, [&]() { sm.setPreference(key, value); displayMenu(preferencesMenu); }});
+	}
+	thisMenu.push_back({ "Go back", [&]() { displayMenu(preferencesMenu); } });
+
 	displayMenu(thisMenu);
+	return;
 }
