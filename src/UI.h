@@ -20,6 +20,7 @@ private:
 	
 	void displayMenu(std::vector<MenuItem>);
 	void updatePreference(std::string key);
+	void quickSearch();
 
 	#ifdef _WIN32
 	// Windows

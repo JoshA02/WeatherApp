@@ -1,5 +1,114 @@
-﻿  UI.cpp
-F:\OneDrive - Nottingham Trent University\Documents\Year 2\Software Design & Imp\Assessments\Weather App 2\curldemo\weather_demo\src\UI.cpp(9,17): warning C4101: 'sm': unreferenced local variable
+﻿  API.cpp
+libcurld.lib(easy.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(easy.obj)' or at ''; linking object as if no debug info
+libcurld.lib(strerror.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(strerror.obj)' or at ''; linking object as if no debug info
+libcurld.lib(setopt.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(setopt.obj)' or at ''; linking object as if no debug info
+libcurld.lib(slist.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(slist.obj)' or at ''; linking object as if no debug info
+libcurld.lib(multi.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(multi.obj)' or at ''; linking object as if no debug info
+libcurld.lib(cookie.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(cookie.obj)' or at ''; linking object as if no debug info
+libcurld.lib(timeval.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(timeval.obj)' or at ''; linking object as if no debug info
+libcurld.lib(asyn-thread.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(asyn-thread.obj)' or at ''; linking object as if no debug info
+libcurld.lib(hostip.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(hostip.obj)' or at ''; linking object as if no debug info
+libcurld.lib(mime.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(mime.obj)' or at ''; linking object as if no debug info
+libcurld.lib(curl_sspi.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(curl_sspi.obj)' or at ''; linking object as if no debug info
+libcurld.lib(vtls.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(vtls.obj)' or at ''; linking object as if no debug info
+libcurld.lib(url.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(url.obj)' or at ''; linking object as if no debug info
+libcurld.lib(getinfo.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(getinfo.obj)' or at ''; linking object as if no debug info
+libcurld.lib(strdup.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(strdup.obj)' or at ''; linking object as if no debug info
+libcurld.lib(select.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(select.obj)' or at ''; linking object as if no debug info
+libcurld.lib(sendf.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(sendf.obj)' or at ''; linking object as if no debug info
+libcurld.lib(connect.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(connect.obj)' or at ''; linking object as if no debug info
+libcurld.lib(warnless.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(warnless.obj)' or at ''; linking object as if no debug info
+libcurld.lib(mprintf.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(mprintf.obj)' or at ''; linking object as if no debug info
+libcurld.lib(version.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(version.obj)' or at ''; linking object as if no debug info
+libcurld.lib(strcase.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(strcase.obj)' or at ''; linking object as if no debug info
+libcurld.lib(content_encoding.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(content_encoding.obj)' or at ''; linking object as if no debug info
+libcurld.lib(share.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(share.obj)' or at ''; linking object as if no debug info
+libcurld.lib(http_proxy.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(http_proxy.obj)' or at ''; linking object as if no debug info
+libcurld.lib(transfer.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(transfer.obj)' or at ''; linking object as if no debug info
+libcurld.lib(llist.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(llist.obj)' or at ''; linking object as if no debug info
+libcurld.lib(hash.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(hash.obj)' or at ''; linking object as if no debug info
+libcurld.lib(hostasyn.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(hostasyn.obj)' or at ''; linking object as if no debug info
+libcurld.lib(splay.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(splay.obj)' or at ''; linking object as if no debug info
+libcurld.lib(http.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(http.obj)' or at ''; linking object as if no debug info
+libcurld.lib(wildcard.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(wildcard.obj)' or at ''; linking object as if no debug info
+libcurld.lib(conncache.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(conncache.obj)' or at ''; linking object as if no debug info
+libcurld.lib(progress.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(progress.obj)' or at ''; linking object as if no debug info
+libcurld.lib(speedcheck.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(speedcheck.obj)' or at ''; linking object as if no debug info
+libcurld.lib(pipeline.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(pipeline.obj)' or at ''; linking object as if no debug info
+libcurld.lib(parsedate.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(parsedate.obj)' or at ''; linking object as if no debug info
+libcurld.lib(strtok.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(strtok.obj)' or at ''; linking object as if no debug info
+libcurld.lib(strtoofft.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(strtoofft.obj)' or at ''; linking object as if no debug info
+libcurld.lib(curl_memrchr.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(curl_memrchr.obj)' or at ''; linking object as if no debug info
+libcurld.lib(inet_pton.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(inet_pton.obj)' or at ''; linking object as if no debug info
+libcurld.lib(curl_addrinfo.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(curl_addrinfo.obj)' or at ''; linking object as if no debug info
+libcurld.lib(curl_threads.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(curl_threads.obj)' or at ''; linking object as if no debug info
+libcurld.lib(hostip4.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(hostip4.obj)' or at ''; linking object as if no debug info
+libcurld.lib(inet_ntop.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(inet_ntop.obj)' or at ''; linking object as if no debug info
+libcurld.lib(rand.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(rand.obj)' or at ''; linking object as if no debug info
+libcurld.lib(system_win32.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(system_win32.obj)' or at ''; linking object as if no debug info
+libcurld.lib(schannel.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(schannel.obj)' or at ''; linking object as if no debug info
+libcurld.lib(getenv.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(getenv.obj)' or at ''; linking object as if no debug info
+libcurld.lib(escape.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(escape.obj)' or at ''; linking object as if no debug info
+libcurld.lib(md5.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(md5.obj)' or at ''; linking object as if no debug info
+libcurld.lib(base64.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(base64.obj)' or at ''; linking object as if no debug info
+libcurld.lib(imap.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(imap.obj)' or at ''; linking object as if no debug info
+libcurld.lib(pop3.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(pop3.obj)' or at ''; linking object as if no debug info
+libcurld.lib(smtp.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(smtp.obj)' or at ''; linking object as if no debug info
+libcurld.lib(ftp.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(ftp.obj)' or at ''; linking object as if no debug info
+libcurld.lib(dict.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(dict.obj)' or at ''; linking object as if no debug info
+libcurld.lib(telnet.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(telnet.obj)' or at ''; linking object as if no debug info
+libcurld.lib(tftp.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(tftp.obj)' or at ''; linking object as if no debug info
+libcurld.lib(ldap.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(ldap.obj)' or at ''; linking object as if no debug info
+libcurld.lib(file.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(file.obj)' or at ''; linking object as if no debug info
+libcurld.lib(rtsp.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(rtsp.obj)' or at ''; linking object as if no debug info
+libcurld.lib(gopher.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(gopher.obj)' or at ''; linking object as if no debug info
+libcurld.lib(smb.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(smb.obj)' or at ''; linking object as if no debug info
+libcurld.lib(netrc.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(netrc.obj)' or at ''; linking object as if no debug info
+libcurld.lib(http_digest.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(http_digest.obj)' or at ''; linking object as if no debug info
+libcurld.lib(http_ntlm.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(http_ntlm.obj)' or at ''; linking object as if no debug info
+libcurld.lib(socks.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(socks.obj)' or at ''; linking object as if no debug info
+libcurld.lib(dotdot.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(dotdot.obj)' or at ''; linking object as if no debug info
+libcurld.lib(if2ip.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(if2ip.obj)' or at ''; linking object as if no debug info
+libcurld.lib(nonblock.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(nonblock.obj)' or at ''; linking object as if no debug info
+libcurld.lib(http_chunks.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(http_chunks.obj)' or at ''; linking object as if no debug info
+libcurld.lib(formdata.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(formdata.obj)' or at ''; linking object as if no debug info
+libcurld.lib(digest_sspi.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(digest_sspi.obj)' or at ''; linking object as if no debug info
+libcurld.lib(ntlm_sspi.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(ntlm_sspi.obj)' or at ''; linking object as if no debug info
+libcurld.lib(spnego_sspi.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(spnego_sspi.obj)' or at ''; linking object as if no debug info
+libcurld.lib(http_negotiate.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(http_negotiate.obj)' or at ''; linking object as if no debug info
+libcurld.lib(fileinfo.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(fileinfo.obj)' or at ''; linking object as if no debug info
+libcurld.lib(x509asn1.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(x509asn1.obj)' or at ''; linking object as if no debug info
+libcurld.lib(pingpong.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(pingpong.obj)' or at ''; linking object as if no debug info
+libcurld.lib(curl_sasl.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(curl_sasl.obj)' or at ''; linking object as if no debug info
+libcurld.lib(curl_gethostname.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(curl_gethostname.obj)' or at ''; linking object as if no debug info
+libcurld.lib(ftplistparser.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(ftplistparser.obj)' or at ''; linking object as if no debug info
+libcurld.lib(curl_ntlm_core.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(curl_ntlm_core.obj)' or at ''; linking object as if no debug info
+libcurld.lib(curl_endian.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(curl_endian.obj)' or at ''; linking object as if no debug info
+libcurld.lib(socks_sspi.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(socks_sspi.obj)' or at ''; linking object as if no debug info
+libcurld.lib(vauth.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(vauth.obj)' or at ''; linking object as if no debug info
+libcurld.lib(digest.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(digest.obj)' or at ''; linking object as if no debug info
+libcurld.lib(cleartext.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(cleartext.obj)' or at ''; linking object as if no debug info
+libcurld.lib(cram.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(cram.obj)' or at ''; linking object as if no debug info
+libcurld.lib(oauth2.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(oauth2.obj)' or at ''; linking object as if no debug info
+libcurld.lib(krb5_sspi.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(krb5_sspi.obj)' or at ''; linking object as if no debug info
+libcurld.lib(curl_fnmatch.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(curl_fnmatch.obj)' or at ''; linking object as if no debug info
+libcurld.lib(curl_des.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(curl_des.obj)' or at ''; linking object as if no debug info
+libcurld.lib(hmac.obj) : warning LNK4099: PDB '' was not found with 'libcurld.lib(hmac.obj)' or at ''; linking object as if no debug info
+curlcppd.lib(curl_exception.obj) : warning LNK4099: PDB '' was not found with 'curlcppd.lib(curl_exception.obj)' or at ''; linking object as if no debug info
+curlcppd.lib(curl_easy.obj) : warning LNK4099: PDB '' was not found with 'curlcppd.lib(curl_easy.obj)' or at ''; linking object as if no debug info
+LINK : warning LNK4217: symbol 'curl_easy_escape' defined in 'libcurld.lib(escape.obj)' is imported by 'curlcppd.lib(curl_easy.obj)' in function '"public: void __cdecl curl::curl_easy::escape(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &)" (?escape@curl_easy@curl@@QEAAXAEAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)'
+LINK : warning LNK4217: symbol 'curl_easy_unescape' defined in 'libcurld.lib(escape.obj)' is imported by 'curlcppd.lib(curl_easy.obj)' in function '"public: void __cdecl curl::curl_easy::unescape(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &)" (?unescape@curl_easy@curl@@QEAAXAEAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)'
+LINK : warning LNK4217: symbol 'curl_free' defined in 'libcurld.lib(escape.obj)' is imported by 'curlcppd.lib(curl_easy.obj)' in function '"public: void __cdecl <lambda_ad5f6132e53305008fb168f5157f3ebb>::operator()(char *)const " (??R<lambda_ad5f6132e53305008fb168f5157f3ebb>@@QEBAXPEAD@Z)'
+LINK : warning LNK4217: symbol 'curl_global_init' defined in 'libcurld.lib(easy.obj)' is imported by 'curlcppd.lib(curl_easy.obj)' in function '"public: __cdecl curl::curl_interface<enum CURLcode>::global_initialisator::global_initialisator(long)" (??0global_initialisator@?$curl_interface@W4CURLcode@@@curl@@QEAA@J@Z)'
+LINK : warning LNK4217: symbol 'curl_global_cleanup' defined in 'libcurld.lib(easy.obj)' is imported by 'curlcppd.lib(curl_easy.obj)' in function '"public: __cdecl curl::curl_interface<enum CURLcode>::global_initialisator::~global_initialisator(void)" (??1global_initialisator@?$curl_interface@W4CURLcode@@@curl@@QEAA@XZ)'
+LINK : warning LNK4217: symbol 'curl_easy_strerror' defined in 'libcurld.lib(strerror.obj)' is imported by 'curlcppd.lib(curl_easy.obj)' in function '"public: __cdecl curl::curl_easy_exception::curl_easy_exception(enum CURLcode const &,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)" (??0curl_easy_exception@curl@@QEAA@AEBW4CURLcode@@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)'
+LINK : warning LNK4217: symbol 'curl_easy_pause' defined in 'libcurld.lib(easy.obj)' is imported by 'curlcppd.lib(curl_easy.obj)' in function '"public: void __cdecl curl::curl_easy::pause(int)" (?pause@curl_easy@curl@@QEAAXH@Z)'
+LINK : warning LNK4217: symbol 'curl_easy_init' defined in 'libcurld.lib(easy.obj)' is imported by 'curlcppd.lib(curl_easy.obj)' in function '"public: __cdecl curl::curl_easy::curl_easy(void)" (??0curl_easy@curl@@QEAA@XZ)'
+LINK : warning LNK4217: symbol 'curl_easy_setopt' defined in 'libcurld.lib(setopt.obj)' is imported by 'curlcppd.lib(curl_easy.obj)' in function '"public: void __cdecl curl::curl_easy::add<10001>(void *)" (??$add@$0CHBB@@curl_easy@curl@@QEAAXPEAX@Z)'
+LINK : warning LNK4217: symbol 'curl_easy_perform' defined in 'libcurld.lib(easy.obj)' is imported by 'curlcppd.lib(curl_easy.obj)' in function '"public: void __cdecl curl::curl_easy::perform(void)" (?perform@curl_easy@curl@@QEAAXXZ)'
+LINK : warning LNK4217: symbol 'curl_easy_cleanup' defined in 'libcurld.lib(easy.obj)' is imported by 'curlcppd.lib(curl_easy.obj)' in function '"public: class curl::curl_easy & __cdecl curl::curl_easy::operator=(class curl::curl_easy const &)" (??4curl_easy@curl@@QEAAAEAV01@AEBV01@@Z)'
+LINK : warning LNK4217: symbol 'curl_easy_duphandle' defined in 'libcurld.lib(easy.obj)' is imported by 'curlcppd.lib(curl_easy.obj)' in function '"public: __cdecl curl::curl_easy::curl_easy(class curl::curl_easy const &)" (??0curl_easy@curl@@QEAA@AEBV01@@Z)'
+LINK : warning LNK4217: symbol 'curl_easy_reset' defined in 'libcurld.lib(easy.obj)' is imported by 'curlcppd.lib(curl_easy.obj)' in function '"public: void __cdecl curl::curl_easy::reset(void)" (?reset@curl_easy@curl@@QEAAXXZ)'
   weather_demo.vcxproj -> F:\OneDrive - Nottingham Trent University\Documents\Year 2\Software Design & Imp\Assessments\Weather App 2\curldemo\weather_demo\build\x64\Debug\weather_demo.exe
   'pwsh.exe' is not recognized as an internal or external command,
   operable program or batch file.

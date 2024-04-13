@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\API.cpp" />
+    <ClCompile Include="src\Location.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\StorageManager.cpp" />
     <ClCompile Include="src\UI.cpp" />

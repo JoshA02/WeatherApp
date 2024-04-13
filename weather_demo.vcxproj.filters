@@ -5,6 +5,7 @@
     <ClCompile Include="src\API.cpp" />
     <ClCompile Include="src\UI.cpp" />
     <ClCompile Include="src\StorageManager.cpp" />
+    <ClCompile Include="src\Location.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\API.h" />

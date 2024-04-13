@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include <iostream>
 
 // latlong is a struct with two members: latitude and longitude
 struct latlong {
@@ -10,5 +10,12 @@ struct latlong {
 
 
 class Location {
+public:
+	Location(std::string locName);
 
+	latlong getCoords();
+
+private:
+	std::string name;
+	latlong coords;
 };

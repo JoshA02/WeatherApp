@@ -3,6 +3,8 @@
 #include "StorageManager.h"
 #include <list>
 #include <string>
+#include "Location.h"
+#include <API.h>
 
 UI::UI()
 {
@@ -12,7 +14,9 @@ UI::UI()
 
 	mainMenu = {
 		{"=== Main Menu ===", []() {}},
-		{"Set Preferences", [&]() { displayMenu(preferencesMenu); }},
+		{"Add New Location", [&]() { displayMenu(preferencesMenu); }},
+		{"Quick Search", [&]() { quickSearch(); } },
+		{"Preferences", [&]() { displayMenu(preferencesMenu); }},
 		{"Go to Second Menu", [&]() { displayMenu(secondMenu); }},
 		{"Quit", [&]() { }}
 	};
@@ -122,4 +126,17 @@ void UI::updatePreference(std::string key) {
 
 	displayMenu(thisMenu);
 	return;
+}
+
+void UI::quickSearch() {
+	std::cout << "=== Quick Search ===" << std::endl << std::endl;
+	
+	std::cout << "Enter location name: ";
+	std::string locationName;
+	std::cin >> locationName;
+
+	Location loc = Location(locationName);
+	API api = API();
+	std::cout << api.getCurrentDataFromLocation(loc);
+	
 }
