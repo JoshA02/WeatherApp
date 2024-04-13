@@ -6,6 +6,7 @@
     <ClCompile Include="src\UI.cpp" />
     <ClCompile Include="src\StorageManager.cpp" />
     <ClCompile Include="src\Location.cpp" />
+    <ClCompile Include="tests\Test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\API.h" />

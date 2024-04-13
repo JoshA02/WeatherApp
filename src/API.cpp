@@ -44,7 +44,7 @@ std::string API::getCurrentDataFromLocation(Location& loc)
         auto jsonString = get_response(url);
 
         auto j = json::parse(jsonString.str());
-		std::cout << j.dump(4) << std::endl;
+		//std::cout << j.dump(4) << std::endl;
 
         // Get the 'results' json array
         auto results = j["current"];

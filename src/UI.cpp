@@ -28,7 +28,7 @@ UI::UI()
 	};
 	
 	preferencesMenu = {
-		{"=== User Preferences ===", []() {}},
+		{"=== User Preferences ===\nThese will only affect future searches", []() {}},
 		{"Temperature Unit (%PREF_tempUnit%)", [&]() { updatePreference("tempUnit"); }},
 		{"Wind Speed Unit (%PREF_windSpeedUnit%)", [&]() { updatePreference("windSpeedUnit"); }},
 		{"Pressure Unit (%PREF_pressureUnit%)", [&]() { updatePreference("pressureUnit"); }},
@@ -129,14 +129,24 @@ void UI::updatePreference(std::string key) {
 }
 
 void UI::quickSearch() {
+	clearScreen();
 	std::cout << "=== Quick Search ===" << std::endl << std::endl;
 	
 	std::cout << "Enter location name: ";
 	std::string locationName;
 	std::cin >> locationName;
 
+	clearScreen();
+	std::cout << "=== Quick Search ===" << std::endl << std::endl;
+	std::cout << "Searching for " << locationName << "..." << std::endl << std::endl;
+
 	Location loc = Location(locationName);
 	API api = API();
-	std::cout << api.getCurrentDataFromLocation(loc);
+	std::string result = api.getCurrentDataFromLocation(loc);
+
+	clearScreen();
+	std::cout << "=== Quick Search ===" << std::endl << std::endl;
+	std::cout << "Results for " << locationName << ":" << std::endl << std::endl;
+	std::cout << result << std::endl;
 	
 }
