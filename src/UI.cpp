@@ -172,6 +172,7 @@ void UI::locationData(Location& l)
 	std::vector<MenuItem> locationMenu = {
 		{"=== Current Data for " + l.getName() + " ===" + "\n\n" + result, []() {}}, // Because the first line isn't considered an option by displayMenu
 		{"View Forecast", [&]() { forecastData(l); }},
+		{"View Historic Data", [&]() { historicData(l); }},
 		{"Go back", [&]() { displayMenu(mainMenu); }}
 	};
 	
@@ -179,26 +180,19 @@ void UI::locationData(Location& l)
 }
 
 void UI::forecastData(Location& l) {
-	//clearScreen();
-
-	//std::cout << "=== Forecast Data for " << l.getName() << " ===" << std::endl << std::endl;
-
 	std::vector<MenuItem> forecastMenu = {
 		{"=== Forecast Data for " + l.getName() + " ===", []() {}},
 		{"Go back", [&]() { locationData(l); }}
 	};
 
 	return displayMenu(forecastMenu);
+}
 
+void UI::historicData(Location& l) {
+	std::vector<MenuItem> historicMenu = {
+		{"=== Historic Data for " + l.getName() + " ===", []() {}},
+		{"Go back", [&]() { locationData(l); }}
+	};
 
-	//API api = API();
-	//std::string result = api.getForecastDataFromLocation(l);
-
-	//std::cout << result << std::endl << std::endl;
-
-	//std::vector<MenuItem> forecastMenu = {
-		//{"Go back", [&]() { locationData(l); }}
-	//};
-
-	//displayMenu(forecastMenu);
+	return displayMenu(historicMenu);
 }

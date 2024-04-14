@@ -24,6 +24,7 @@ private:
 	void quickSearch();
 	void locationData(Location& l);
 	void forecastData(Location& l);
+	void historicData(Location& l);
 
 	#ifdef _WIN32
 	// Windows
