@@ -14,6 +14,7 @@ public:
 	Location(std::string locName);
 
 	latlong getCoords();
+	std::string getName();
 
 private:
 	std::string name;

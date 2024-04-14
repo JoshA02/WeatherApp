@@ -140,13 +140,65 @@ void UI::quickSearch() {
 	std::cout << "=== Quick Search ===" << std::endl << std::endl;
 	std::cout << "Searching for " << locationName << "..." << std::endl << std::endl;
 
-	Location loc = Location(locationName);
-	API api = API();
-	std::string result = api.getCurrentDataFromLocation(loc);
+	try {
+		Location loc = Location(locationName);
 
+		return locationData(loc);
+
+		//clearScreen();
+		//std::cout << "=== Quick Search ===" << std::endl << std::endl;
+		//std::cout << "Results for " << loc.getName() << ":" << std::endl << std::endl;
+		//std::cout << result << std::endl;
+	}
+	catch (LocationNotFoundException e) {
+		std::cout << "Location not found. Press enter to return to main menu" << std::endl;
+		
+		_getch();
+		displayMenu(mainMenu);
+
+		return;
+	}	
+}
+
+void UI::locationData(Location& l)
+{
 	clearScreen();
-	std::cout << "=== Quick Search ===" << std::endl << std::endl;
-	std::cout << "Results for " << locationName << ":" << std::endl << std::endl;
-	std::cout << result << std::endl;
 	
+	API api = API();
+	std::string result = api.getCurrentDataFromLocation(l);
+	
+	std::cout << result << std::endl << std::endl;
+	
+	std::vector<MenuItem> locationMenu = {
+		{"=== Current Data for " + l.getName() + " ===" + "\n\n" + result, []() {}}, // Because the first line isn't considered an option by displayMenu
+		{"View Forecast", [&]() { forecastData(l); }},
+		{"Go back", [&]() { displayMenu(mainMenu); }}
+	};
+	
+	return displayMenu(locationMenu);
+}
+
+void UI::forecastData(Location& l) {
+	//clearScreen();
+
+	//std::cout << "=== Forecast Data for " << l.getName() << " ===" << std::endl << std::endl;
+
+	std::vector<MenuItem> forecastMenu = {
+		{"=== Forecast Data for " + l.getName() + " ===", []() {}},
+		{"Go back", [&]() { locationData(l); }}
+	};
+
+	return displayMenu(forecastMenu);
+
+
+	//API api = API();
+	//std::string result = api.getForecastDataFromLocation(l);
+
+	//std::cout << result << std::endl << std::endl;
+
+	//std::vector<MenuItem> forecastMenu = {
+		//{"Go back", [&]() { locationData(l); }}
+	//};
+
+	//displayMenu(forecastMenu);
 }

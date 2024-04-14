@@ -33,8 +33,6 @@ std::stringstream API::get_response(std::string_view url)
 // TODO: Return JSON object instead of string to make saving data easier when implementing. Then again, I won't be saving current weather data, just forecast data, so maybe it's not necessary.
 std::string API::getCurrentDataFromLocation(Location& loc)
 {
-    //
-    
     using namespace std::string_literals;
     using json = nlohmann::json;
 
@@ -51,13 +49,13 @@ std::string API::getCurrentDataFromLocation(Location& loc)
 
         std::stringstream ss;
 
-		ss << "Temperature: " << results["temperature_2m"] << "°C\n";
-		ss << "Humidity: " << results["relative_humidity_2m"] << "%\n";
-		ss << "Precipitation: " << results["precipitation"] << "mm\n";
-		ss << "Cloud Cover: " << results["cloud_cover"] << "%\n";
-		ss << "Wind Speed: " << results["wind_speed_10m"] << "m/s\n";
-		ss << "Wind Direction: " << results["wind_direction_10m"] << "°\n";
-		ss << "Wind Gusts: " << results["wind_gusts_10m"] << "m/s\n";
+		ss << "Temperature: " << results["temperature_2m"] << "\n";
+		ss << "Humidity: " << results["relative_humidity_2m"] << "\n";
+		ss << "Precipitation: " << results["precipitation"] << "\n";
+		ss << "Cloud Cover: " << results["cloud_cover"] << "\n";
+		ss << "Wind Speed: " << results["wind_speed_10m"] << "\n";
+		ss << "Wind Direction: " << results["wind_direction_10m"] << "\n";
+		ss << "Wind Gusts: " << results["wind_gusts_10m"] << "\n";
         
 		return ss.str();
 	}
@@ -88,12 +86,12 @@ std::string API::getCurrentDataFromLocation(Location& loc)
 ;
 
 
-latlong API::getLatLongFromLocation(std::string location) {
+latlong API::getCoordsFromLocationName(std::string name) {
     using namespace std::string_literals;
     using json = nlohmann::json;
 
-    auto url = "https://geocoding-api.open-meteo.com/v1/search?name=" + location + "&count=1&language=en&format=json";
-    latlong ll;
+    auto url = "https://geocoding-api.open-meteo.com/v1/search?name=" + name + "&count=1&language=en&format=json";
+    latlong ll = {};
 
     try {
         auto jsonString = get_response(url);
@@ -117,11 +115,6 @@ latlong API::getLatLongFromLocation(std::string location) {
         return ll;
     }
     catch (std::exception e) {
-        ll.latitude = 0;
-        ll.longitude = 0;
-        std::cout << "Error grabbing location data" << std::endl;
-
-        // TODO: Consider throwing a custom exception if the location is 0, 0
-        return ll;
+        throw LocationNotFoundException(name);
     }
 };

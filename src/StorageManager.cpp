@@ -118,24 +118,6 @@ std::list<std::string> StorageManager::getPrefAllowedValues(std::string key)
 		values.push_back(x);
 	}
 	
-
-	//std::string type = getPreferenceType(key);
-	//
-	//json allowedValues = data[key]["allowedValues"];
-	//
-	//std::list<std::string> values;
-	//for (json::iterator it = allowedValues.begin(); it != allowedValues.end(); ++it) {
-
-	//	std::string x = it.value().dump();
-	//	// remove quotes from string
-	//	/*if (type == "string" || type == "char") {
-	//		x = x.substr(1, x.length() - 2);
-	//	}*/
-
-	//	values.push_back(x);
-	//	std::cout << x << std::endl;
-	//}
-	
 	return values;
 }
 
@@ -155,6 +137,8 @@ std::string StorageManager::getPreferenceType(std::string key)
 
 bool StorageManager::preferenceExists(std::string key)
 {
+	// Could utilize the getPreferenceType function to check if the key exists, but this is more efficient
+
 	std::ifstream file("user.prefs");
 	if (!file.good()) throw PreferenceNotFoundException(key);
 

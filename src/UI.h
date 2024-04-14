@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <functional>
+#include "Location.h"
 
 
 class UI
@@ -21,6 +22,8 @@ private:
 	void displayMenu(std::vector<MenuItem>);
 	void updatePreference(std::string key);
 	void quickSearch();
+	void locationData(Location& l);
+	void forecastData(Location& l);
 
 	#ifdef _WIN32
 	// Windows

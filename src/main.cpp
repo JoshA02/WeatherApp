@@ -15,7 +15,7 @@ int main()
 {   
 	try {
 		API api;
-		latlong ll = api.getLatLongFromLocation("London");
+		latlong ll = api.getCoordsFromLocationName("London");
 		std::cout << "Latitude: " << ll.latitude << std::endl;
 		std::cout << "Longitude: " << ll.longitude << std::endl;
 
