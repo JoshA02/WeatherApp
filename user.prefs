@@ -9,11 +9,11 @@
     },
     "precipitationUnit": {
         "allowedValues": [
-            "m",
-            "i"
+            "mm",
+            "inch"
         ],
-        "type": "char",
-        "value": "m"
+        "type": "string",
+        "value": "mm"
     },
     "pressureUnit": {
         "allowedValues": [
@@ -26,11 +26,11 @@
     },
     "tempUnit": {
         "allowedValues": [
-            "c",
-            "f"
+            "celsius",
+            "fahrenheit"
         ],
-        "type": "char",
-        "value": "c"
+        "type": "string",
+        "value": "fahrenheit"
     },
     "timeFormat": {
         "allowedValues": [
@@ -47,11 +47,12 @@
     },
     "windSpeedUnit": {
         "allowedValues": [
-            "k",
-            "m",
-            "n"
+            "kmh",
+            "ms",
+            "mph",
+            "knots"
         ],
-        "type": "char",
-        "value": "k"
+        "type": "string",
+        "value": "ms"
     }
 }

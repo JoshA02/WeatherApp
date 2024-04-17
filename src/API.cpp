@@ -5,7 +5,12 @@
 #include "curl_form.h"
 #include "curl_ios.h"
 #include "curl_exception.h"
+#include <algorithm>
+#include "StorageManager.h"
 
+
+using namespace std::string_literals;
+using json = nlohmann::json;
 
 std::stringstream API::get_response(std::string_view url)
 {
@@ -30,60 +35,120 @@ std::stringstream API::get_response(std::string_view url)
 }
 
 
-// TODO: Return JSON object instead of string to make saving data easier when implementing. Then again, I won't be saving current weather data, just forecast data, so maybe it's not necessary.
 std::string API::getCurrentDataFromLocation(Location& loc)
 {
-    using namespace std::string_literals;
-    using json = nlohmann::json;
+    WeatherUnits units = getUnits();
 
-	auto url = std::format("https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&current=temperature_2m,relative_humidity_2m,precipitation,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m", std::to_string(loc.getCoords().latitude), std::to_string(loc.getCoords().longitude));
+    auto url = std::format("https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&current=temperature_2m,relative_humidity_2m,precipitation,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m&temperature_unit={}&wind_speed_unit={}&precipitation_unit={}", std::to_string(loc.getCoords().latitude), std::to_string(loc.getCoords().longitude), units.tempUnit, units.windSpeedUnit, units.precipUnit);
 
     try {
         auto jsonString = get_response(url);
 
         auto j = json::parse(jsonString.str());
-		//std::cout << j.dump(4) << std::endl;
+        //std::cout << j.dump(4) << std::endl;
 
         // Get the 'results' json array
         auto results = j["current"];
 
+        auto unitsJson = j["current_units"];
+
+
         std::stringstream ss;
 
-		ss << "Temperature: " << results["temperature_2m"] << "\n";
-		ss << "Humidity: " << results["relative_humidity_2m"] << "\n";
-		ss << "Precipitation: " << results["precipitation"] << "\n";
-		ss << "Cloud Cover: " << results["cloud_cover"] << "\n";
-		ss << "Wind Speed: " << results["wind_speed_10m"] << "\n";
-		ss << "Wind Direction: " << results["wind_direction_10m"] << "\n";
-		ss << "Wind Gusts: " << results["wind_gusts_10m"] << "\n";
-        
-		return ss.str();
-	}
-	catch (std::exception e) {
-		std::cout << "Error grabbing current data" << std::endl;
-		return "";
-	}
+        for (auto& [key, value] : results.items()) {
+            if (ignoreKey(key)) continue;
+            const std::string thisUnit = ignoreUnit(key) ? "" : unitsJson[key].get<std::string>();
+            ss << responseNameToFriendly(key) << ": " << value << thisUnit << "\n";
+        }
 
-    //    // Get the 'latitude' and 'longitude' values
-    //    auto latitude = firstResult["latitude"];
-    //    auto longitude = firstResult["longitude"];
+        return ss.str();
+    }
+    catch (std::exception e) {
+        std::cout << "Error grabbing current data" << std::endl;
+        return "";
+    }
+};
 
-    //    ll.latitude = latitude;
-    //    ll.longitude = longitude;
-    //    return ll;
-    //}
-    //catch (std::exception e) {
-    //    ll.latitude = 0;
-    //    ll.longitude = 0;
-    //    std::cout << "Error grabbing location data" << std::endl;
 
-    //    // TODO: Consider throwing a custom exception if the location is 0, 0
-    //    return ll;
-    //}
-    //
-    //return std::string();
+// Returns data for each day requested, including hourly data for each day.
+std::vector<dayData> API::getDayDataFromLocationWithinRange(Location& loc, Date startDate, Date endDate, std::list<std::string> dailyKeysToInclude, std::list<std::string> hourlyKeysToInclude){
+
+    //WeatherUnits units = getUnits();
+    // TODO: Add units and more daily data options
+
+
+    std::string url = std::format("https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&hourly=temperature_2m,relative_humidity_2m&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset&start_date={}&end_date={}", std::to_string(loc.getCoords().latitude), std::to_string(loc.getCoords().longitude), startDate.toString("YYYY-MM-DD"), endDate.toString("YYYY-MM-DD"));
+
+    auto jsonString = get_response(url);
+
+    auto j = json::parse(jsonString.str());
+
+	// The 'reason' will only be present if there was an error:
+	if (j.find("reason") != j.end()) throw std::invalid_argument("Error: " + j["reason"].get<std::string>());
+    
+    std::vector<dayData> days;
+
+    try {
+        std::stringstream ss;
+
+        auto dailyData = j["daily"];
+        auto hourlyData = j["hourly"];
+        //auto unitsJson = j["daily_units"];
+
+		for (int dayIndex = 0; dayIndex < dailyData["time"].size(); dayIndex++) {
+            dayData day;
+            day.dailyData = std::vector<weatherProperty>();
+            day.hourlyData = std::vector<hourData>();
+
+            //std::cout << "Hourly data start index " << 24 * dayIndex << ". End index " << (24 * dayIndex) + 23 << std::endl;
+            for (int hourIndex = (24 * dayIndex); hourIndex <= (24 * dayIndex) + 23; hourIndex++) {
+                hourData hour;
+                hour.keysAndValues = std::vector<weatherProperty>();
+
+                std::cout << hourIndex << std::endl;
+                for (auto key : hourlyKeysToInclude) {
+                    weatherProperty p;
+                    p.key = key;
+                    if (!hourlyData[key][hourIndex].is_string()) p.value = hourlyData[key][hourIndex].dump();
+                    else p.value = hourlyData[key][hourIndex].get<std::string>();
+
+                    std::cout << "Found hourly data: " << p.key << " = " << p.value << std::endl;
+
+                    hour.keysAndValues.push_back(p);
+                }
+
+                day.hourlyData.push_back(hour);
+            }
+
+
+            for (auto key : dailyKeysToInclude) {
+                weatherProperty p;
+                p.key = key;
+                if (!dailyData[key][dayIndex].is_string()) p.value = dailyData[key][dayIndex].dump();
+                else p.value = dailyData[key][dayIndex].get<std::string>();
+                //std::cout << p.key << ": " << p.value << std::endl;
+                day.dailyData.push_back(p);
+            }
+			days.push_back(day);
+            std::cout << std::endl << std::endl;
+		}
+
+        std::cout << "Made " << days.size() << " days" << std::endl;
+        for (auto day : days) {
+            for (weatherProperty prop : day.dailyData)
+            {
+                std::cout << prop.key << ": " << prop.value << std::endl;
+            }
+            std::cout << std::endl << std::endl;
+        }
+
+        return days;
+    }
+    catch (std::exception e) {
+        //std::cout << e.what() << std::endl;
+        return {};
+    }
 }
-;
 
 
 latlong API::getCoordsFromLocationName(std::string name) {
@@ -117,4 +182,45 @@ latlong API::getCoordsFromLocationName(std::string name) {
     catch (std::exception e) {
         throw LocationNotFoundException(name);
     }
+}
+WeatherUnits API::getUnits()
+{
+    StorageManager sm;
+    // TODO: Ask the StorageManager for the data.
+    WeatherUnits units;
+    units.precipUnit = sm.getPreference("precipitationUnit");
+    units.tempUnit = sm.getPreference("tempUnit");
+    units.windSpeedUnit = sm.getPreference("windSpeedUnit");
+
+    return units;
 };
+
+std::string API::responseNameToFriendly(std::string name) {
+    for (char& c : name) {
+        std::tolower(c);
+    }
+
+
+	std::unordered_map<std::string, std::string> friendlyNames = {
+		{"temperature_2m", "Temperature"},
+		{"relative_humidity_2m", "Humidity"},
+		{"precipitation", "Precipitation"},
+		{"cloud_cover", "Cloud Cover"},
+		{"wind_speed_10m", "Wind Speed"},
+		{"wind_direction_10m", "Wind Direction"},
+		{"wind_gusts_10m", "Wind Gusts"},
+        {"time", "Time"}
+	};
+	if (friendlyNames.find(name) == friendlyNames.end()) {
+		return name;
+	}
+
+	return friendlyNames[name];
+}
+
+bool API::ignoreKey(std::string key) {
+    return std::find(ignoredKeys.begin(), ignoredKeys.end(), key) != ignoredKeys.end();
+}
+bool API::ignoreUnit(std::string key) {
+    return std::find(ignoredUnits.begin(), ignoredUnits.end(), key) != ignoredUnits.end();
+}

@@ -13,6 +13,7 @@
 
 int main()
 {   
+	std::locale::global(std::locale("en_US.UTF-8"));
 	try {
 		API api;
 		latlong ll = api.getCoordsFromLocationName("London");
@@ -25,7 +26,7 @@ int main()
 		std::cout << e.what() << std::endl;
 	}
 
-	StorageManager sm;
+	//StorageManager sm;
 	//try {
 	//	std::cout << sm.getPreference("tempUnit") << std::endl;
 
