@@ -3,6 +3,7 @@
 #include <iostream>
 #include <functional>
 #include "Location.h"
+#include "Utils.h"
 
 
 class UI
@@ -29,6 +30,8 @@ private:
 	void dailyData(Location& l);
 	void forecastData(Location& l);
 	void historicData(Location& l);
+
+	DateRange askForDateRange();
 
 	#ifdef _WIN32
 	// Windows

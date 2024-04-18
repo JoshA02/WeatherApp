@@ -31,6 +31,11 @@ public:
 	}
 };
 
+struct DateRange {
+	Date start;
+	Date end;
+};
+
 class Utils
 {
 public:

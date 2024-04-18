@@ -5,7 +5,6 @@
 #include <string>
 #include "Location.h"
 #include <API.h>
-#include <Utils.h>
 
 UI::UI()
 {
@@ -74,6 +73,7 @@ void UI::displayMenu(std::vector<MenuItem> menuItems) {
 		else throw std::exception();
 	}
 	catch (std::exception e) {
+		std::cout << e.what() << std::endl;
 		std::cout << "Invalid choice. Press enter to dismiss" << std::endl;
 		_getch();
 		displayMenu(menuItems);
@@ -184,6 +184,40 @@ void UI::dailyData(Location& l) {
 	clearScreen();
 
 	std::cout << "=== Daily Data for " << l.getName() << std::endl;
+
+	DateRange dateRange = askForDateRange(); // This handles validation and everything. Returns a DateRange object with the start and end dates
+
+	const std::string dailyDataHeader = "=== Daily Data for " + l.getName() + " from " + dateRange.start.toString() + " to " + dateRange.end.toString() + " ===";
+
+	clearScreen();
+	std::cout << dailyDataHeader << std::endl;
+	std::cout << "Fetching data between " << dateRange.start.toString() << " and " << dateRange.end.toString() << "..." << std::endl;
+
+	API api;
+	std::vector<dayData> days = api.getDayDataFromLocationWithinRange(l, dateRange.start, dateRange.end); // Returns a data structure containing all the data for each day, including the hourly data for each day
+	std::cout << "Found " << days.size() << " days worth of data!" << std::endl;
+	
+	// return(displayMenu(newMenu)), where new menu is the current 
+	
+	if (days.size() == 0) {
+		std::cout << "No data found. Hit enter to try again." << std::endl;
+		_getch();
+		return dailyData(l);
+	}
+	
+	//std::string x;
+	//std::cin >> x;
+
+	// TODO: Append the daily data. Allow them to view hourly.
+	// For hourly, display the hourly data (using cout, not displayMenu).
+	// Then, finally, just use displayMenu to display the left/right arrows to go to the next hour. Those buttons will then call the displayHour function, providing the day and hour +/- 1.
+	// To do this, displayMenu will need a param to say whether to clear the screen or not so the hourly data gets accompanied with the buttons, not replaced by them.
+	// Later, I could have custom logic within displayMenu to look for the user pressing left/right if the label is "Go back" and the menu is a single item. But, for now, just have regular numbered options (1) - Go back one hour, (2) - Go forward one hour, (3) - Return to daily data.
+
+	//return displayMenu(dailyMenu);
+}
+
+DateRange UI::askForDateRange() {
 	std::string startDateInput;
 	std::string endDateInput;
 
@@ -193,73 +227,51 @@ void UI::dailyData(Location& l) {
 	std::cout << "Enter end date (DD-MM-YYYY) - can be the same as start: ";
 	std::cin >> endDateInput;
 
+	// Ensure that the provided strings are in valid date format (MUST BE DD-MM-YYYY):
+
+	// 1 - Check that the length is 10
+	if (startDateInput.length() != 10 || endDateInput.length() != 10) {
+		std::cout << "Invalid date(s). Press enter to try again" << std::endl;
+		_getch();
+		return askForDateRange();
+	}
+
+	// 2 - Check that the 2nd and 5th characters are '-'
+	if (startDateInput[2] != '-' || startDateInput[5] != '-' || endDateInput[2] != '-' || endDateInput[5] != '-') {
+		std::cout << "Invalid date(s). Press enter to try again" << std::endl;
+		_getch();
+		return askForDateRange();
+	}
+
+	// 3 - Check that the first 2 characters and the 3rd and 4th characters are numbers using std::stoi
+	try {
+		std::stoi(startDateInput.substr(0, 2));
+		std::stoi(startDateInput.substr(3, 2));
+		std::stoi(startDateInput.substr(6, 4));
+
+		std::stoi(endDateInput.substr(0, 2));
+		std::stoi(endDateInput.substr(3, 2));
+		std::stoi(endDateInput.substr(6, 4));
+	}
+	catch (std::invalid_argument e) {
+		std::cout << "Invalid date(s). Press enter to try again" << std::endl;
+		_getch();
+		return askForDateRange();
+	}
+
+	// Should be good, so create the Date objects:
 	Date startDate = Date(startDateInput.substr(0, 2), startDateInput.substr(3, 2), startDateInput.substr(6, 4));
 	Date endDate = Date(endDateInput.substr(0, 2), endDateInput.substr(3, 2), endDateInput.substr(6, 4));
 
-	if(!Utils::validateDate(startDate) || !Utils::validateDate(endDate)) {
+	DateRange range = DateRange(startDate, endDate);
+
+	if (!Utils::validateDate(range.start) || !Utils::validateDate(range.end)) {
 		std::cout << "Invalid date(s). Press enter to try again" << std::endl;
 		_getch();
-		return dailyData(l);
+		return askForDateRange();
 	}
 
-	const std::string dailyDataHeader = "=== Daily Data for " + l.getName() + " from " + startDate.toString() + " to " + endDate.toString() + " ===";
-
-	clearScreen();
-	std::cout << dailyDataHeader << std::endl;
-	std::cout << "Fetching data between " << startDate.toString() << " and " << endDate.toString() << "..." << std::endl;
-
-	API api;
-	std::vector<dayData> data = api.getDayDataFromLocationWithinRange(l, startDate, endDate);
-	std::cout << "Found " << data.size() << " days worth of data!" << std::endl;
-	
-	/*if (data.length() == 0) {
-		std::cout << "No data found. Hit enter to try again." << std::endl;
-		_getch();
-		return dailyData(l);
-	}
-	cout << data << endl;*/
-
-	
-	std::string x;
-	std::cin >> x;
-	
-	try {
-		// The l.getDailyData function returns the general data for that day (sunset, sunrise, etc).
-		
-		
-		// Can then use a loop to call l.getHourData.
-		//	When navigating to the next hour, try adding one to the day variable but keep the month the same.
-		//  If this doesn't work (API returns null), try the first day of the next month.
-		//  If the month is 12, move over to 1 and increment the year.
-
-
-
-		//std::string result = l.getDailyData(day, month, year, 1);
-		//clearScreen();
-
-		//std::vector<MenuItem> dailyDataMenu = {
-			//{dailyDataHeader + "\n\n" + result, []() {}}, // Because the first line isn't considered an option by displayMenu
-			//{"View Hourly Data For This Day - NOT IMPLEMENTED", [&]() { locationData(l); }},
-			//{"Go back", [&]() { locationData(l); }}
-		//};
-		
-		//return displayMenu(dailyDataMenu);
-	}
-	catch (std::exception e) {
-		clearScreen();
-		std::cout << "No data available for " << startDate.toString() << ". Press enter to return to daily data" << std::endl;
-		_getch();
-		return dailyData(l);
-	}
-	
-
-	// TODO: Append the daily data. Allow them to view hourly.
-	// For hourly, display the hourly data (using cout, not displayMenu).
-	// Then, finally, just use displayMenu to display the left/right arrows to go to the next hour. Those buttons will then call the displayHour function, providing the day and hour +/- 1.
-	// To do this, displayMenu will need a param to say whether to clear the screen or not so the hourly data gets accompanied with the buttons, not replaced by them.
-	// Later, I could have custom logic within displayMenu to look for the user pressing left/right if the label is "Go back" and the menu is a single item. But, for now, just have regular numbered options (1) - Go back one hour, (2) - Go forward one hour, (3) - Return to daily data.
-
-	//return displayMenu(dailyMenu);
+	return range;
 }
 
 void UI::forecastData(Location& l) {
