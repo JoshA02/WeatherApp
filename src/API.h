@@ -57,7 +57,8 @@ private:
 	std::list<std::string> ignoredUnits = {
 		"time",
 		"sunrise",
-		"sunset"
+		"sunset",
+		"weather_code"
 	};
 
 public:

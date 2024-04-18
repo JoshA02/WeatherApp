@@ -93,7 +93,8 @@ std::vector<dayData> API::getDayDataFromLocationWithinRange(Location& loc, Date 
 
         auto dailyData = j["daily"];
         auto hourlyData = j["hourly"];
-        //auto unitsJson = j["daily_units"];
+        auto dailyUnitsJson = j["daily_units"];
+		auto hourlyUnitsJson = j["hourly_units"];
 
 		for (int dayIndex = 0; dayIndex < dailyData["time"].size(); dayIndex++) {
             dayData day;
@@ -111,6 +112,7 @@ std::vector<dayData> API::getDayDataFromLocationWithinRange(Location& loc, Date 
                     p.key = responseNameToFriendly(key);
                     if (!hourlyData[key][hourIndex].is_string()) p.value = hourlyData[key][hourIndex].dump();
                     else p.value = hourlyData[key][hourIndex].get<std::string>();
+                    if (!ignoreUnit(key)) p.value = p.value + hourlyUnitsJson[key].get<std::string>();
 
                     std::cout << "Found hourly data: " << p.key << " = " << p.value << std::endl;
 
@@ -126,6 +128,7 @@ std::vector<dayData> API::getDayDataFromLocationWithinRange(Location& loc, Date 
                 p.key = responseNameToFriendly(key);
                 if (!dailyData[key][dayIndex].is_string()) p.value = dailyData[key][dayIndex].dump();
                 else p.value = dailyData[key][dayIndex].get<std::string>();
+                if (!ignoreUnit(key)) p.value = p.value + dailyUnitsJson[key].get<std::string>();
                 //std::cout << p.key << ": " << p.value << std::endl;
                 day.dailyData.push_back(p);
             }
