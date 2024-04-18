@@ -88,9 +88,14 @@ std::vector<dayData> API::getDayDataFromLocationWithinRange(Location& loc, Date 
     if (j.find("reason") != j.end()) {
 		
         // If the data requested is too old for the forecast API, try using the historic one.
-		if (j["reason"].get<std::string>().find("out of allowed range") != std::string::npos && urlPrefix == "https://api.open-meteo.com/v1/forecast") {
-			return getDayDataFromLocationWithinRange(loc, startDate, endDate, dailyKeysToInclude, hourlyKeysToInclude, "https://archive-api.open-meteo.com/v1/archive");
+		if (j["reason"].get<std::string>().find("'start_date' is out of allowed range") != std::string::npos) {
+            if (urlPrefix == "https://api.open-meteo.com/v1/forecast") return getDayDataFromLocationWithinRange(loc, startDate, endDate, dailyKeysToInclude, hourlyKeysToInclude, "https://archive-api.open-meteo.com/v1/archive");
+            else throw invalid_argument("The start date you provided is outside the allowed range.");
 ;		}
+
+        if (j["reason"].get<string>().find("'end_date' is out of allowed range") != string::npos) {
+            throw invalid_argument("The end date you provided is too far in the future. Try, at most, 16 days ahead.");
+        }
 
         throw std::invalid_argument("Error: " + j["reason"].get<std::string>());
     }
@@ -110,12 +115,10 @@ std::vector<dayData> API::getDayDataFromLocationWithinRange(Location& loc, Date 
             day.dailyData = std::vector<weatherProperty>();
             day.hourlyData = std::vector<hourData>();
 
-            //std::cout << "Hourly data start index " << 24 * dayIndex << ". End index " << (24 * dayIndex) + 23 << std::endl;
             for (int hourIndex = (24 * dayIndex); hourIndex <= (24 * dayIndex) + 23; hourIndex++) {
                 hourData hour;
                 hour.keysAndValues = std::vector<weatherProperty>();
 
-                std::cout << hourIndex << std::endl;
                 for (auto key : hourlyKeysToInclude) {
                     weatherProperty p;
                     json jsonValue = hourlyData[key][hourIndex];
@@ -124,8 +127,6 @@ std::vector<dayData> API::getDayDataFromLocationWithinRange(Location& loc, Date 
                     if (!jsonValue.is_string()) p.value = jsonValue.dump();
                     else p.value = jsonValue.get<std::string>();
                     if (!ignoreUnit(key)) p.value = p.value + hourlyUnitsJson[key].get<std::string>();
-
-                    std::cout << "Found hourly data: " << p.key << " = " << p.value << std::endl;
 
                     hour.keysAndValues.push_back(p);
                 }
@@ -142,26 +143,13 @@ std::vector<dayData> API::getDayDataFromLocationWithinRange(Location& loc, Date 
                 if (!jsonValue.is_string()) p.value = jsonValue.dump();
                 else p.value = jsonValue.get<std::string>();
                 if (!ignoreUnit(key)) p.value = p.value + dailyUnitsJson[key].get<std::string>();
-                //std::cout << p.key << ": " << p.value << std::endl;
                 day.dailyData.push_back(p);
             }
 			days.push_back(day);
-            std::cout << std::endl << std::endl;
 		}
-
-        std::cout << "Made " << days.size() << " days" << std::endl;
-        for (auto day : days) {
-            for (weatherProperty prop : day.dailyData)
-            {
-                std::cout << prop.key << ": " << prop.value << std::endl;
-            }
-            std::cout << std::endl << std::endl;
-        }
-
         return days;
     }
     catch (std::exception e) {
-        //std::cout << e.what() << std::endl;
         return {};
     }
 }

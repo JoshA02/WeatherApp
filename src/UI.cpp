@@ -183,22 +183,31 @@ void UI::dailyData(Location& l) {
 
 	clearScreen();
 
-	std::cout << "=== Daily Data for " << l.getName() << std::endl;
+	cout << "=== Daily Data for " << l.getName() << endl;
 
 	DateRange dateRange = askForDateRange(); // This handles validation and everything. Returns a DateRange object with the start and end dates
 
-	const std::string dailyDataHeader = "=== Daily Data for " + l.getName() + " from " + dateRange.start.toString() + " to " + dateRange.end.toString() + " ===";
+	const string dailyDataHeader = "=== Daily Data for " + l.getName() + " from " + dateRange.start.toString() + " to " + dateRange.end.toString() + " ===";
 
 	clearScreen();
-	std::cout << dailyDataHeader << std::endl;
-	std::cout << "Fetching data between " << dateRange.start.toString() << " and " << dateRange.end.toString() << "..." << std::endl;
+	cout << dailyDataHeader << endl;
+	cout << "Fetching data between " << dateRange.start.toString() << " and " << dateRange.end.toString() << "..." << endl;
 
 	API api;
-	std::vector<dayData> days = api.getDayDataFromLocationWithinRange(l, dateRange.start, dateRange.end); // Returns a data structure containing all the data for each day, including the hourly data for each day
-	std::cout << "Found " << days.size() << " days worth of data!" << std::endl;
+	vector<dayData> days;
+	try {
+		cout << "Fetching data, please wait..." << endl;
+		days = api.getDayDataFromLocationWithinRange(l, dateRange.start, dateRange.end); // Returns a data structure containing all the data for each day, including the hourly data for each day
+		cout << "Found " << days.size() << " days worth of data!" << endl;
+	}
+	catch (invalid_argument e) {
+		cout << e.what() << endl << "Press enter to try again" << endl;
+		_getch();
+		return dailyData(l);
+	}
 	
 	if (days.size() == 0) {
-		std::cout << "No data found. Hit enter to try again." << std::endl;
+		cout << "No data found. Hit enter to try again." << endl;
 		_getch();
 		return dailyData(l);
 	}
