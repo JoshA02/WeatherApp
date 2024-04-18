@@ -210,39 +210,16 @@ std::string API::responseNameToFriendly(std::string name) {
 		{"wind_speed_10m", "Wind Speed"},
 		{"wind_direction_10m", "Wind Direction"},
 		{"wind_gusts_10m", "Wind Gusts"},
-        {"time", "Time"}
+        {"time", "Time"},
+        {"weather_code", "Weather Code"},
+        {"temperature_2m_max", "Max Temperature"},
+        {"temperature_2m_min", "Min Temperature"},
+        {"apparent_temperature_max", "Max Apparent Temperature"},
+        {"apparent_temperature_min", "Min Apparent Temperature"},
 	};
 	if (friendlyNames.find(name) == friendlyNames.end()) {
-		
-		// Can't find it in the list so just try to make it look nice; replace underscores with spaces and capitalise the first letter of each word
-		replace(name.begin(), name.end(), '_', ' ');
-		
-		vector<string> words;
-		string word = "";
-        bool startOfWord = true;
-        
-		for (char c : name) {
-			if (c == ' ') {
-				words.push_back(word);
-				word = "";
-				startOfWord = true;
-                continue;
-			}
-			if (startOfWord) {
-				word += std::toupper(c);
-				startOfWord = false;
-			}
-			else word += c;
-		}
-		if (words.size() == 0) words.push_back(word); // For one-word properties
-
-		// Set name to words joined by spaces
-		name = "";
-		for (string word : words) name += word + " ";
-
-        /*name[0] = std::toupper(name[0]);*/
-        
-		return name;
+		name[0] = toupper(name[0]); // Can't find it so just capitalize the first letter and hope it looks okay.
+        return name;
 	}
 
 	return friendlyNames[name];
