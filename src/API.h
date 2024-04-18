@@ -66,7 +66,7 @@ public:
 	std::string getCurrentDataFromLocation(Location& loc); // Returns the current weather data for a location. Could change this to return a struct with all the data, like getDayDataFromLocationWithinRange
 	
 	// Returns each day requested, including the daily and hourly data
-	std::vector<dayData> getDayDataFromLocationWithinRange(Location& loc, Date startDate, Date endDate,
+	std::vector<dayData> getDaysFromLocationAndRange(Location& loc, Date startDate, Date endDate,
 		std::list<std::string> dailyKeysToInclude = {
 			"weather_code",
 			"temperature_2m_max",

@@ -196,8 +196,7 @@ void UI::dailyData(Location& l) {
 	API api;
 	vector<dayData> days;
 	try {
-		cout << "Fetching data, please wait..." << endl;
-		days = api.getDayDataFromLocationWithinRange(l, dateRange.start, dateRange.end); // Returns a data structure containing all the data for each day, including the hourly data for each day
+		days = api.getDaysFromLocationAndRange(l, dateRange.start, dateRange.end); // Returns a data structure containing all the data for each day, including the hourly data for each day
 		cout << "Found " << days.size() << " days worth of data!" << endl;
 	}
 	catch (invalid_argument e) {
@@ -212,19 +211,7 @@ void UI::dailyData(Location& l) {
 		return dailyData(l);
 	}
 
-	displayDay(l, days, 0); // Display the first day's data
-
-
-
-	
-
-	// TODO: Append the daily data. Allow them to view hourly.
-	// For hourly, display the hourly data (using cout, not displayMenu).
-	// Then, finally, just use displayMenu to display the left/right arrows to go to the next hour. Those buttons will then call the displayHour function, providing the day and hour +/- 1.
-	// To do this, displayMenu will need a param to say whether to clear the screen or not so the hourly data gets accompanied with the buttons, not replaced by them.
-	// Later, I could have custom logic within displayMenu to look for the user pressing left/right if the label is "Go back" and the menu is a single item. But, for now, just have regular numbered options (1) - Go back one hour, (2) - Go forward one hour, (3) - Return to daily data.
-
-	//return displayMenu(dailyMenu);
+	return displayDay(l, days, 0); // Display the first day's data
 }
 
 DateRange UI::askForDateRange() {
