@@ -4,6 +4,8 @@
 #include <functional>
 #include "Location.h"
 #include "Utils.h"
+#include <vector>
+#include "API.h"
 
 
 class UI
@@ -30,6 +32,8 @@ private:
 	void dailyData(Location& l);
 	void forecastData(Location& l);
 	void historicData(Location& l);
+
+	void displayDay(Location& l, std::vector<dayData> days, int dayIndex);
 
 	DateRange askForDateRange();
 

@@ -197,16 +197,17 @@ void UI::dailyData(Location& l) {
 	std::vector<dayData> days = api.getDayDataFromLocationWithinRange(l, dateRange.start, dateRange.end); // Returns a data structure containing all the data for each day, including the hourly data for each day
 	std::cout << "Found " << days.size() << " days worth of data!" << std::endl;
 	
-	// return(displayMenu(newMenu)), where new menu is the current 
-	
 	if (days.size() == 0) {
 		std::cout << "No data found. Hit enter to try again." << std::endl;
 		_getch();
 		return dailyData(l);
 	}
+
+	displayDay(l, days, 0); // Display the first day's data
+
+
+
 	
-	//std::string x;
-	//std::cin >> x;
 
 	// TODO: Append the daily data. Allow them to view hourly.
 	// For hourly, display the hourly data (using cout, not displayMenu).
@@ -273,6 +274,32 @@ DateRange UI::askForDateRange() {
 
 	return range;
 }
+
+// Could take a "header" string as input to show at the top of the menu
+void UI::displayDay(Location& loc, std::vector<dayData> days, int dayIndex) {
+	using namespace std;
+	
+	vector<MenuItem> dayMenu = {};
+
+	stringstream ss;
+	for (auto data : days[dayIndex].dailyData) {
+		ss << data.key << ": " << data.value << endl;
+	}
+
+	dayMenu.push_back({ "=== Daily Data for " + loc.getName() + " @ x date ===\n\n" + ss.str(), []() {}});
+
+	if (days.size() - 1 > dayIndex) dayMenu.push_back({ "Next Day", [&]() { displayDay(loc, days, dayIndex + 1); } });
+	if (dayIndex > 0)				dayMenu.push_back({ "Previous Day", [&]() { displayDay(loc, days, dayIndex - 1); } });
+	
+	auto lastOption = dayMenu[dayMenu.size() - 1];
+	lastOption.label = lastOption.label + "\n"; // Add some space after the last option
+	dayMenu[dayMenu.size() - 1] = lastOption;
+
+	dayMenu.push_back({ "Return To Location Summary", [&]() { locationData(loc); } });
+
+	return displayMenu(dayMenu);
+}
+
 
 void UI::forecastData(Location& l) {
 	std::vector<MenuItem> forecastMenu = {

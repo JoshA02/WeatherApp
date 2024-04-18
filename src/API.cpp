@@ -108,7 +108,7 @@ std::vector<dayData> API::getDayDataFromLocationWithinRange(Location& loc, Date 
                 std::cout << hourIndex << std::endl;
                 for (auto key : hourlyKeysToInclude) {
                     weatherProperty p;
-                    p.key = key;
+                    p.key = responseNameToFriendly(key);
                     if (!hourlyData[key][hourIndex].is_string()) p.value = hourlyData[key][hourIndex].dump();
                     else p.value = hourlyData[key][hourIndex].get<std::string>();
 
@@ -123,7 +123,7 @@ std::vector<dayData> API::getDayDataFromLocationWithinRange(Location& loc, Date 
 
             for (auto key : dailyKeysToInclude) {
                 weatherProperty p;
-                p.key = key;
+                p.key = responseNameToFriendly(key);
                 if (!dailyData[key][dayIndex].is_string()) p.value = dailyData[key][dayIndex].dump();
                 else p.value = dailyData[key][dayIndex].get<std::string>();
                 //std::cout << p.key << ": " << p.value << std::endl;
@@ -196,6 +196,7 @@ WeatherUnits API::getUnits()
 };
 
 std::string API::responseNameToFriendly(std::string name) {
+    using namespace std;
     for (char& c : name) {
         std::tolower(c);
     }
@@ -212,6 +213,35 @@ std::string API::responseNameToFriendly(std::string name) {
         {"time", "Time"}
 	};
 	if (friendlyNames.find(name) == friendlyNames.end()) {
+		
+		// Can't find it in the list so just try to make it look nice; replace underscores with spaces and capitalise the first letter of each word
+		replace(name.begin(), name.end(), '_', ' ');
+		
+		vector<string> words;
+		string word = "";
+        bool startOfWord = true;
+        
+		for (char c : name) {
+			if (c == ' ') {
+				words.push_back(word);
+				word = "";
+				startOfWord = true;
+                continue;
+			}
+			if (startOfWord) {
+				word += std::toupper(c);
+				startOfWord = false;
+			}
+			else word += c;
+		}
+		if (words.size() == 0) words.push_back(word); // For one-word properties
+
+		// Set name to words joined by spaces
+		name = "";
+		for (string word : words) name += word + " ";
+
+        /*name[0] = std::toupper(name[0]);*/
+        
 		return name;
 	}
 
