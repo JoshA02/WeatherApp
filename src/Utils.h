@@ -6,6 +6,11 @@ class Date {
 public:
 	Date(int day, int month, int year) : day(day), month(month), year(year) {}
 	Date(std::string day, std::string month, std::string year) : day(std::stoi(day)), month(std::stoi(month)), year(std::stoi(year)) {}
+	Date(std::string ISO8601) {
+		year = std::stoi(ISO8601.substr(0, 4));
+		month = std::stoi(ISO8601.substr(5, 2));
+		day = std::stoi(ISO8601.substr(8, 2));
+	}
 
 	int day;
 	int month;

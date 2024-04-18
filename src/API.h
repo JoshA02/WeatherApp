@@ -34,6 +34,7 @@ struct hourData {
 };
 
 struct dayData {
+	Date date;
 	std::vector<weatherProperty> dailyData;
 	std::vector<hourData> hourlyData;
 };
@@ -68,7 +69,6 @@ public:
 	// Returns each day requested, including the daily and hourly data
 	std::vector<dayData> getDaysFromLocationAndRange(Location& loc, Date startDate, Date endDate,
 		std::list<std::string> dailyKeysToInclude = {
-			"weather_code",
 			"temperature_2m_max",
 			"temperature_2m_min",
 			"apparent_temperature_max",

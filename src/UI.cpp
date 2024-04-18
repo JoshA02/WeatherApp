@@ -282,10 +282,14 @@ void UI::displayDay(Location& loc, std::vector<dayData> days, int dayIndex) {
 		ss << data.key << ": " << data.value << endl;
 	}
 
-	dayMenu.push_back({ "=== Daily Data for " + loc.getName() + " @ x date ===\n\n" + ss.str(), []() {}});
+
+	dayMenu.push_back({ "=== Daily Data for " + loc.getName() + " @ " + days[dayIndex].date.toString() + " ===\n\n" + ss.str(), []() {}});
+
+	if (dayIndex > 0)				dayMenu.push_back({ "Previous Day", [&]() { displayDay(loc, days, dayIndex - 1); } });
+	else							dayMenu.push_back({ "AT START", [&]() { displayDay(loc, days, dayIndex); } });
 
 	if (days.size() - 1 > dayIndex) dayMenu.push_back({ "Next Day", [&]() { displayDay(loc, days, dayIndex + 1); } });
-	if (dayIndex > 0)				dayMenu.push_back({ "Previous Day", [&]() { displayDay(loc, days, dayIndex - 1); } });
+	else							dayMenu.push_back({ "AT END", [&]() { displayDay(loc, days, dayIndex); } });
 	
 	auto lastOption = dayMenu[dayMenu.size() - 1];
 	lastOption.label = lastOption.label + "\n"; // Add some space after the last option

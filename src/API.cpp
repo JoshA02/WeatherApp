@@ -117,7 +117,7 @@ std::vector<dayData> API::getDaysFromLocationAndRange(Location& loc, Date startD
 		auto hourlyUnitsJson = j["hourly_units"];
 
 		for (int dayIndex = 0; dayIndex < dailyData["time"].size(); dayIndex++) {
-            dayData day;
+            dayData day = dayData(Date(dailyData["time"][dayIndex]));
             day.dailyData = std::vector<weatherProperty>();
             day.hourlyData = std::vector<hourData>();
 
@@ -139,7 +139,6 @@ std::vector<dayData> API::getDaysFromLocationAndRange(Location& loc, Date startD
 
                 day.hourlyData.push_back(hour);
             }
-
 
             for (auto key : dailyKeysToInclude) {
                 weatherProperty p;
