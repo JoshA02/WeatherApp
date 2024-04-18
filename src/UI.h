@@ -34,6 +34,7 @@ private:
 	void historicData(Location& l);
 
 	void displayDay(Location& l, std::vector<dayData> days, int dayIndex);
+	void displayHour(Location& l, std::vector<dayData> days, int dayIndex, int hourIndex); // day index is needed to get the date, and to return to the correct day when the user goes back.
 
 	DateRange askForDateRange();
 

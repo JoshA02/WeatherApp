@@ -122,7 +122,7 @@ std::vector<dayData> API::getDaysFromLocationAndRange(Location& loc, Date startD
             day.hourlyData = std::vector<hourData>();
 
             for (int hourIndex = (24 * dayIndex); hourIndex <= (24 * dayIndex) + 23; hourIndex++) {
-                hourData hour;
+                hourData hour = hourData(Time(hourlyData["time"][hourIndex]));
                 hour.keysAndValues = std::vector<weatherProperty>();
 
                 for (auto key : hourlyKeysToInclude) {

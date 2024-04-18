@@ -7,41 +7,20 @@
 #include "API.h"
 #include <UI.h>
 #include <StorageManager.h>
-
-
-// ctrl + shift + / to toggle comments
+#include <conio.h>
 
 int main()
 {   
 	std::locale::global(std::locale("en_US.UTF-8"));
 	try {
-		API api;
-		latlong ll = api.getCoordsFromLocationName("London");
-		std::cout << "Latitude: " << ll.latitude << std::endl;
-		std::cout << "Longitude: " << ll.longitude << std::endl;
-
-		// Create new UI instance:
 		UI ui;
 	} catch (std::exception& e) {
+		// Should be caught by the UI class, but just in case.
 		std::cout << e.what() << std::endl;
+		std::cout << "Press any key to try again or close the app to exit" << std::endl;
+		_getch();
+		main();
 	}
-
-	//StorageManager sm;
-	//try {
-	//	std::cout << sm.getPreference("tempUnit") << std::endl;
-
-	//	sm.getPrefAllowedValues("tempUnit");
-	//	sm.getPrefAllowedValues("timeFormat");
-	//	
-	//	/*sm.setPreference("test", "Hello World");
-	//	sm.setPreference("tempUnit", "Celsius");
-	//	sm.setPreference("tempUnit", "c");*/
-
-	//	//sm.setPreference("jeff", "c");
-	//}
-	//catch (std::exception& e) {
-	//	std::cout << e.what() << std::endl;
-	//}
 
     return 0;
 }

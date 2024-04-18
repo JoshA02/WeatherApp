@@ -276,11 +276,9 @@ void UI::displayDay(Location& loc, std::vector<dayData> days, int dayIndex) {
 	using namespace std;
 	
 	vector<MenuItem> dayMenu = {};
-
 	stringstream ss;
-	for (auto data : days[dayIndex].dailyData) {
-		ss << data.key << ": " << data.value << endl;
-	}
+
+	for (auto data : days[dayIndex].dailyData) ss << data.key << ": " << data.value << endl; // Print each of the weather data keys and values to ss.
 
 
 	dayMenu.push_back({ "=== Daily Data for " + loc.getName() + " @ " + days[dayIndex].date.toString() + " ===\n\n" + ss.str(), []() {}});
@@ -295,9 +293,41 @@ void UI::displayDay(Location& loc, std::vector<dayData> days, int dayIndex) {
 	lastOption.label = lastOption.label + "\n"; // Add some space after the last option
 	dayMenu[dayMenu.size() - 1] = lastOption;
 
+	dayMenu.push_back({ "View Hourly Data For This Day", [&]() { displayHour(loc, days, dayIndex, 0); } });
 	dayMenu.push_back({ "Return To Location Summary", [&]() { locationData(loc); } });
 
 	return displayMenu(dayMenu);
+}
+
+void UI::displayHour(Location& loc, std::vector<dayData> days, int dayIndex, int hourIndex) {
+	using namespace std;
+
+	vector<MenuItem> hourMenu = {};
+	stringstream ss;
+
+	dayData thisDay = days[dayIndex];
+	hourData thisHour = thisDay.hourlyData[hourIndex];
+	vector<weatherProperty> thisHourData = thisHour.keysAndValues;
+
+	for (weatherProperty data : thisHourData) ss << data.key << ": " << data.value << endl;
+
+	hourMenu.push_back({ "=== Hourly Data for " + loc.getName() + " @ " + thisHour.time.toString() +" ===\n\n" + ss.str(), []() {} });
+
+	if (hourIndex > 0)				hourMenu.push_back({ "Previous Hour", [&]() { displayHour(loc, days, dayIndex, hourIndex - 1); } });
+	else							hourMenu.push_back({ "AT START", [&]() { displayHour(loc, days, dayIndex, hourIndex); } });
+
+	if (thisDay.hourlyData.size() - 1 > hourIndex) hourMenu.push_back({"Next Hour", [&]() { displayHour(loc, days, dayIndex, hourIndex + 1); }});
+	else							hourMenu.push_back({ "AT END", [&]() { displayHour(loc, days, dayIndex, hourIndex); } });
+
+	auto lastOption = hourMenu[hourMenu.size() - 1];
+	lastOption.label = lastOption.label + "\n"; // Add some space after the last option
+	hourMenu[hourMenu.size() - 1] = lastOption;
+
+	hourMenu.push_back({ "Return To Day Summary", [&]() { displayDay(loc, days, dayIndex); } });
+	hourMenu.push_back({ "Return To Location Summary", [&]() { locationData(loc); } });
+
+	return displayMenu(hourMenu);
+	
 }
 
 

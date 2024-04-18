@@ -35,6 +35,33 @@ public:
 		return result;
 	}
 };
+class Time {
+public:
+	Time(int hour, int minute) : hour(hour), minute(minute) {
+		if (hour < 0 || hour > 23 || minute < 0 || minute > 59) throw std::invalid_argument("Invalid time");
+	}
+	Time(std::string ISO8601) {
+		hour = std::stoi(ISO8601.substr(11, 2));
+		minute = std::stoi(ISO8601.substr(14, 2));
+	}
+
+	std::string toString(std::string format = "HH:MM") {
+		std::string hourStr = (hour < 10) ? "0" + std::to_string(hour) : std::to_string(hour);
+		std::string minuteStr = (minute < 10) ? "0" + std::to_string(minute) : std::to_string(minute);
+
+		std::string result = format;
+		size_t hourPos = result.find("HH");
+		size_t minutePos = result.find("MM");
+
+		if (hourPos != std::string::npos) result.replace(hourPos, 2, hourStr);
+		if (minutePos != std::string::npos) result.replace(minutePos, 2, minuteStr);
+
+		return result;
+	}
+
+	int hour;
+	int minute;
+};
 
 struct DateRange {
 	Date start;

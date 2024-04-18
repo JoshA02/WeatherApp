@@ -30,6 +30,7 @@ struct weatherProperty {
 };
 
 struct hourData {
+	Time time;
 	std::vector<weatherProperty> keysAndValues;
 };
 
