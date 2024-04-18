@@ -22,6 +22,7 @@ struct WeatherUnits {
 	std::string tempUnit = "celsius";
 	std::string windSpeedUnit = "kmh";
 	std::string precipUnit = "mm";
+	std::string timeZone = "Europe/London";
 };
 
 struct weatherProperty {
@@ -49,7 +50,7 @@ private:
 	bool ignoreKey(std::string key);
 	bool ignoreUnit(std::string key);
 	
-	WeatherUnits getUnits();
+	WeatherUnits getUserOptions();
 
 	std::list<std::string> ignoredKeys = {
 		"interval"

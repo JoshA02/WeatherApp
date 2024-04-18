@@ -37,9 +37,12 @@ std::stringstream API::get_response(std::string_view url)
 
 std::string API::getCurrentDataFromLocation(Location& loc)
 {
-    WeatherUnits units = getUnits();
+    using namespace std;
+    WeatherUnits units = getUserOptions();
 
-    auto url = std::format("https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&current=temperature_2m,relative_humidity_2m,precipitation,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m&temperature_unit={}&wind_speed_unit={}&precipitation_unit={}", std::to_string(loc.getCoords().latitude), std::to_string(loc.getCoords().longitude), units.tempUnit, units.windSpeedUnit, units.precipUnit);
+    string urlOptions = format("temperature_unit={}&wind_speed_unit={}&precipitation_unit={}&timezone={}", units.tempUnit, units.windSpeedUnit, units.precipUnit, units.timeZone);
+    auto url = std::format("https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&current=temperature_2m,relative_humidity_2m,precipitation,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m&", std::to_string(loc.getCoords().latitude), std::to_string(loc.getCoords().longitude));
+    url += urlOptions;
 
     try {
         auto jsonString = get_response(url);
@@ -58,7 +61,10 @@ std::string API::getCurrentDataFromLocation(Location& loc)
         for (auto& [key, value] : results.items()) {
             if (ignoreKey(key)) continue;
             const std::string thisUnit = ignoreUnit(key) ? "" : unitsJson[key].get<std::string>();
-            ss << responseNameToFriendly(key) << ": " << value << thisUnit << "\n";
+            string valueStr = value.is_string() ? value.get<string>() : value.dump();
+            if (key == "time") valueStr = Date(results[key].get<string>()).toString() + " - " + Time(results[key].get<string>()).toString();
+            
+            ss << responseNameToFriendly(key) << ": " << valueStr << thisUnit << "\n";
         }
 
         return ss.str();
@@ -74,12 +80,12 @@ std::string API::getCurrentDataFromLocation(Location& loc)
 std::vector<dayData> API::getDaysFromLocationAndRange(Location& loc, Date startDate, Date endDate, std::list<std::string> dailyKeysToInclude, std::list<std::string> hourlyKeysToInclude, std::string urlPrefix){
     using namespace std;
 
-    WeatherUnits units = getUnits();
+    WeatherUnits units = getUserOptions();
 
     string urlLatLong = format("latitude={}&longitude={}", std::to_string(loc.getCoords().latitude), std::to_string(loc.getCoords().longitude));
     string urlHourlyDataPoints = format("hourly=temperature_2m,relative_humidity_2m,dew_point_2m,apparent_temperature,precipitation_probability,precipitation,rain,showers,snowfall,snow_depth,weather_code,pressure_msl,surface_pressure,cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,visibility,evapotranspiration,et0_fao_evapotranspiration,vapour_pressure_deficit,wind_speed_10m,wind_speed_80m,wind_speed_120m,wind_speed_180m,wind_direction_10m,wind_direction_80m,wind_direction_120m,wind_direction_180m,wind_gusts_10m,temperature_80m,temperature_120m,temperature_180m,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_18cm,soil_temperature_54cm,soil_moisture_0_to_1cm,soil_moisture_1_to_3cm,soil_moisture_3_to_9cm,soil_moisture_9_to_27cm,soil_moisture_27_to_81cm");
     string urlDailyDataPoints = format("daily=temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,uv_index_max,rain_sum");
-    string urlOptions = format("temperature_unit={}&wind_speed_unit={}&precipitation_unit={}&timezone=Europe%2FLondon", units.tempUnit, units.windSpeedUnit, units.precipUnit);
+    string urlOptions = format("temperature_unit={}&wind_speed_unit={}&precipitation_unit={}&timezone={}", units.tempUnit, units.windSpeedUnit, units.precipUnit, units.timeZone);
     string urlStartDate = format("start_date={}", startDate.toString("YYYY-MM-DD"));
     string urlEndDate = format("end_date={}", endDate.toString("YYYY-MM-DD"));
 
@@ -192,7 +198,7 @@ latlong API::getCoordsFromLocationName(std::string name) {
         throw LocationNotFoundException(name);
     }
 }
-WeatherUnits API::getUnits()
+WeatherUnits API::getUserOptions()
 {
     StorageManager sm;
     // TODO: Ask the StorageManager for the data.
@@ -200,6 +206,7 @@ WeatherUnits API::getUnits()
     units.precipUnit = sm.getPreference("precipitationUnit");
     units.tempUnit = sm.getPreference("tempUnit");
     units.windSpeedUnit = sm.getPreference("windSpeedUnit");
+    units.timeZone = sm.getPreference("timeZone");
 
     return units;
 };
@@ -219,7 +226,7 @@ std::string API::responseNameToFriendly(std::string name) {
 		{"wind_speed_10m", "Wind Speed"},
 		{"wind_direction_10m", "Wind Direction"},
 		{"wind_gusts_10m", "Wind Gusts"},
-        {"time", "Time"},
+        {"time", "Time Of Reading"},
         {"weather_code", "Weather Code"},
         {"temperature_2m_max", "Max Temperature"},
         {"temperature_2m_min", "Min Temperature"},

@@ -35,6 +35,7 @@ UI::UI()
 		{"Past Days (%PREF_pastDays%)", [&]() { updatePreference("pastDays"); }},
 		{"Forecast Days (%PREF_forecastDays%)", [&]() { updatePreference("forecastDays"); }},
 		{"Time Zone (%PREF_timeZone%)", [&]() { updatePreference("timeZone"); }},
+		// TODO: Implement the multiselect example. This type of preference will be used for picking which hourly/daily variables you want. User can type the num of the one they want to toggle to toggle it.
 		{"Go to Main Menu", [&]() { displayMenu(mainMenu); }}
 	};
 	
@@ -73,7 +74,7 @@ void UI::displayMenu(std::vector<MenuItem> menuItems) {
 		else throw std::exception();
 	}
 	catch (std::exception e) {
-		std::cout << e.what() << std::endl;
+		//std::cout << e.what() << std::endl;
 		std::cout << "Invalid choice. Press enter to dismiss" << std::endl;
 		_getch();
 		displayMenu(menuItems);
@@ -81,6 +82,7 @@ void UI::displayMenu(std::vector<MenuItem> menuItems) {
 }
 
 void UI::updatePreference(std::string key) {
+	clearScreen();
 	StorageManager sm;
 	
 	std::list<std::string> values = sm.getPrefAllowedValues(key);
@@ -112,10 +114,9 @@ void UI::updatePreference(std::string key) {
 		catch (std::exception e) {
 			std::cout << "Invalid value. Press enter to dismiss" << std::endl;
 			_getch();
-			updatePreference(key); // Try again
+			return updatePreference(key); // Try again
 		}
-		displayMenu(mainMenu);
-		return;
+		return displayMenu(mainMenu);
 	}
 
 	for (std::string &value : values) {
@@ -311,7 +312,7 @@ void UI::displayHour(Location& loc, std::vector<dayData> days, int dayIndex, int
 
 	for (weatherProperty data : thisHourData) ss << data.key << ": " << data.value << endl;
 
-	hourMenu.push_back({ "=== Hourly Data for " + loc.getName() + " @ " + thisHour.time.toString() +" ===\n\n" + ss.str(), []() {} });
+	hourMenu.push_back({ "=== Hourly Data for " + loc.getName() + " | " + thisDay.date.toString() + " @ " + thisHour.time.toString() +" ===\n\n" + ss.str(), []() {} });
 
 	if (hourIndex > 0)				hourMenu.push_back({ "Previous Hour", [&]() { displayHour(loc, days, dayIndex, hourIndex - 1); } });
 	else							hourMenu.push_back({ "AT START", [&]() { displayHour(loc, days, dayIndex, hourIndex); } });

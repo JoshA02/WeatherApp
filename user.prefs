@@ -41,6 +41,24 @@
         "value": 24
     },
     "timeZone": {
+        "allowedValues": [
+            "America/Anchorage",
+            "America/Los_Angeles",
+            "America/Denver",
+            "America/Chicago",
+            "America/New_York",
+            "America/Sao_Paulo",
+            "Europe/London",
+            "Europe/Paris",
+            "Europe/Berlin",
+            "Europe/Moscow",
+            "Africa/Cairo",
+            "Asia/Bangkok",
+            "Asia/Singapore",
+            "Asia/Tokyo",
+            "Australia/Sydney",
+            "Pacific/Auckland"
+        ],
         "message": "Valid time zones are: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones",
         "type": "string",
         "value": "Europe/London"
@@ -53,6 +71,18 @@
             "knots"
         ],
         "type": "string",
-        "value": "ms"
+        "value": "mph"
+    },
+    "multiselectExample": {
+        "allowedValues": [
+            "item1",
+            "item2",
+            "item3"
+        ],
+        "type": "list",
+        "value": [
+            "item1",
+            "item2"
+        ]
     }
 }
