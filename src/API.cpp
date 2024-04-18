@@ -71,20 +71,29 @@ std::string API::getCurrentDataFromLocation(Location& loc)
 
 
 // Returns data for each day requested, including hourly data for each day.
-std::vector<dayData> API::getDayDataFromLocationWithinRange(Location& loc, Date startDate, Date endDate, std::list<std::string> dailyKeysToInclude, std::list<std::string> hourlyKeysToInclude){
+std::vector<dayData> API::getDayDataFromLocationWithinRange(Location& loc, Date startDate, Date endDate, std::list<std::string> dailyKeysToInclude, std::list<std::string> hourlyKeysToInclude, std::string urlPrefix){
 
     //WeatherUnits units = getUnits();
     // TODO: Add units and more daily data options
+    using namespace std;
 
-
-    std::string url = std::format("https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&hourly=temperature_2m,relative_humidity_2m&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset&start_date={}&end_date={}", std::to_string(loc.getCoords().latitude), std::to_string(loc.getCoords().longitude), startDate.toString("YYYY-MM-DD"), endDate.toString("YYYY-MM-DD"));
+    string urlSuffix = format("?latitude={}&longitude={}&hourly=temperature_2m,relative_humidity_2m&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset&start_date={}&end_date={}", std::to_string(loc.getCoords().latitude), std::to_string(loc.getCoords().longitude), startDate.toString("YYYY-MM-DD"), endDate.toString("YYYY-MM-DD"));
+	std::string url = urlPrefix + urlSuffix;
 
     auto jsonString = get_response(url);
 
     auto j = json::parse(jsonString.str());
 
 	// The 'reason' will only be present if there was an error:
-	if (j.find("reason") != j.end()) throw std::invalid_argument("Error: " + j["reason"].get<std::string>());
+    if (j.find("reason") != j.end()) {
+		
+        // If the data requested is too old for the forecast API, try using the historic one.
+		if (j["reason"].get<std::string>().find("out of allowed range") != std::string::npos && urlPrefix == "https://api.open-meteo.com/v1/forecast") {
+			return getDayDataFromLocationWithinRange(loc, startDate, endDate, dailyKeysToInclude, hourlyKeysToInclude, "https://archive-api.open-meteo.com/v1/archive");
+;		}
+
+        throw std::invalid_argument("Error: " + j["reason"].get<std::string>());
+    }
     
     std::vector<dayData> days;
 
@@ -109,9 +118,11 @@ std::vector<dayData> API::getDayDataFromLocationWithinRange(Location& loc, Date 
                 std::cout << hourIndex << std::endl;
                 for (auto key : hourlyKeysToInclude) {
                     weatherProperty p;
+                    json jsonValue = hourlyData[key][hourIndex];
+                    if (jsonValue.is_null() && urlPrefix == "https://api.open-meteo.com/v1/forecast") return getDayDataFromLocationWithinRange(loc, startDate, endDate, dailyKeysToInclude, hourlyKeysToInclude, "https://archive-api.open-meteo.com/v1/archive"); // Try the historic API
                     p.key = responseNameToFriendly(key);
-                    if (!hourlyData[key][hourIndex].is_string()) p.value = hourlyData[key][hourIndex].dump();
-                    else p.value = hourlyData[key][hourIndex].get<std::string>();
+                    if (!jsonValue.is_string()) p.value = jsonValue.dump();
+                    else p.value = jsonValue.get<std::string>();
                     if (!ignoreUnit(key)) p.value = p.value + hourlyUnitsJson[key].get<std::string>();
 
                     std::cout << "Found hourly data: " << p.key << " = " << p.value << std::endl;
@@ -126,8 +137,10 @@ std::vector<dayData> API::getDayDataFromLocationWithinRange(Location& loc, Date 
             for (auto key : dailyKeysToInclude) {
                 weatherProperty p;
                 p.key = responseNameToFriendly(key);
-                if (!dailyData[key][dayIndex].is_string()) p.value = dailyData[key][dayIndex].dump();
-                else p.value = dailyData[key][dayIndex].get<std::string>();
+                json jsonValue = dailyData[key][dayIndex];
+                if(jsonValue.is_null() && urlPrefix == "https://api.open-meteo.com/v1/forecast") return getDayDataFromLocationWithinRange(loc, startDate, endDate, dailyKeysToInclude, hourlyKeysToInclude, "https://archive-api.open-meteo.com/v1/archive"); // Try the historic API
+                if (!jsonValue.is_string()) p.value = jsonValue.dump();
+                else p.value = jsonValue.get<std::string>();
                 if (!ignoreUnit(key)) p.value = p.value + dailyUnitsJson[key].get<std::string>();
                 //std::cout << p.key << ": " << p.value << std::endl;
                 day.dailyData.push_back(p);

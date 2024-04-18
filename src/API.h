@@ -79,6 +79,6 @@ public:
 		std::list<std::string> hourlyKeysToInclude = {
 			"temperature_2m",
 			"relative_humidity_2m"
-		}
+		}, std::string urlPrefix = "https://api.open-meteo.com/v1/forecast"
 	);
 };
