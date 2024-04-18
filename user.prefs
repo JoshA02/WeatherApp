@@ -30,7 +30,7 @@
             "fahrenheit"
         ],
         "type": "string",
-        "value": "fahrenheit"
+        "value": "celsius"
     },
     "timeFormat": {
         "allowedValues": [
