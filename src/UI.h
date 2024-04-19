@@ -21,12 +21,13 @@ private:
 	std::vector<MenuItem> mainMenu;
 	std::vector<MenuItem> secondMenu;
 	std::vector<MenuItem> preferencesMenu;
+	std::vector<MenuItem> dataPreferencesMenu;
 	
 	void displayMenuNoInput(std::vector<MenuItem> menuItems);
 	int getChoice(std::vector<MenuItem> menuItems);
 	void displayMenu(std::vector<MenuItem>);
 
-	void updatePreference(std::string key);
+	void updatePreference(std::string key, std::vector<MenuItem>);
 	void quickSearch();
 	void locationData(Location& l);
 	void dailyData(Location& l);

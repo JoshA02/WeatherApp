@@ -55,9 +55,9 @@ public:
 	std::string getPreference(std::string key); // Returns the value of a preference key as a string.
 	void setPreference(std::string key, std::string value); // Sets a preference key to a value, only if the key exists in the file already.
 	std::list<std::string> getPrefAllowedValues(std::string key); // Returns a list of allowed values for a preference key.
+	std::string getPreferenceType(std::string key); // Returns the type of a preference key (string, int, float, bool, char, etc.)
 
 private:
-	std::string getPreferenceType(std::string key); // Returns the type of a preference key (string, int, float, bool, char, etc.)
 	bool preferenceExists(std::string key); // Checks if a preference key exists in the file.
 };
 

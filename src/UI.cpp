@@ -27,15 +27,23 @@ UI::UI()
 	
 	preferencesMenu = {
 		{"=== User Preferences ===\nThese will only affect future searches", []() {}},
-		{"Temperature Unit (%PREF_tempUnit%)", [&]() { updatePreference("tempUnit"); }},
-		{"Wind Speed Unit (%PREF_windSpeedUnit%)", [&]() { updatePreference("windSpeedUnit"); }},
-		{"Pressure Unit (%PREF_pressureUnit%)", [&]() { updatePreference("pressureUnit"); }},
-		{"Precipitation Unit (%PREF_precipitationUnit%)", [&]() { updatePreference("precipitationUnit"); }},
-		{"Time Format (%PREF_timeFormat%)", [&]() { updatePreference("timeFormat"); }},
-		{"Past Days (%PREF_pastDays%)", [&]() { updatePreference("pastDays"); }},
-		{"Forecast Days (%PREF_forecastDays%)", [&]() { updatePreference("forecastDays"); }},
-		{"Time Zone (%PREF_timeZone%)", [&]() { updatePreference("timeZone"); }},
+		{"Temperature Unit (%PREF_tempUnit%)", [&]() { updatePreference("tempUnit", preferencesMenu); }},
+		{"Wind Speed Unit (%PREF_windSpeedUnit%)", [&]() { updatePreference("windSpeedUnit", preferencesMenu); }},
+		{"Pressure Unit (%PREF_pressureUnit%)", [&]() { updatePreference("pressureUnit", preferencesMenu); }},
+		{"Precipitation Unit (%PREF_precipitationUnit%)", [&]() { updatePreference("precipitationUnit", preferencesMenu); }},
+		{"Time Format (%PREF_timeFormat%)", [&]() { updatePreference("timeFormat", preferencesMenu); }},
+		{"Past Days (%PREF_pastDays%)", [&]() { updatePreference("pastDays", preferencesMenu); }},
+		{"Forecast Days (%PREF_forecastDays%)", [&]() { updatePreference("forecastDays", preferencesMenu); }},
+		{"Time Zone (%PREF_timeZone%)\n", [&]() { updatePreference("timeZone", preferencesMenu); }},
+		{"Data Preferences", [&]() { displayMenu(dataPreferencesMenu); }},
 		// TODO: Implement the multiselect example. This type of preference will be used for picking which hourly/daily variables you want. User can type the num of the one they want to toggle to toggle it.
+		{"Go to Main Menu", [&]() { displayMenu(mainMenu); }}
+	};
+
+	dataPreferencesMenu = {
+		{"=== Data Preferences ===\nThese will only affect future searches", []() {}},
+		{"Include Precipitation - Currently (%PREF_precipitation%)\n", [&]() { updatePreference("precipitation", dataPreferencesMenu); }},
+		{"Return to Preferences Menu", [&]() { displayMenu(preferencesMenu); }},
 		{"Go to Main Menu", [&]() { displayMenu(mainMenu); }}
 	};
 	
@@ -81,10 +89,15 @@ void UI::displayMenu(std::vector<MenuItem> menuItems) {
 	}
 }
 
-void UI::updatePreference(std::string key) {
+void UI::updatePreference(std::string key, std::vector<MenuItem> returnMenu) {
 	clearScreen();
 	StorageManager sm;
 	
+	if (sm.getPreferenceType(key) == "bool") {
+		sm.setPreference(key, sm.getPreference(key) == "true" ? "false" : "true"); // Set it to whatever it isn't
+		return displayMenu(returnMenu);
+	}
+
 	std::list<std::string> values = sm.getPrefAllowedValues(key);
 	
 	std::string introText = "=== Updating " + key + " - currently " + sm.getPreference(key) + " ===";
@@ -92,7 +105,7 @@ void UI::updatePreference(std::string key) {
 	std::vector<MenuItem> thisMenu = {};
 	if (values.size() > 0) thisMenu.push_back({ introText + "\nPossible values : ", []() {} });
 
-
+	
 	if (values.size() == 0) {
 		std::cout << introText << std::endl;
 		std::cout << "'back' to go back" << std::endl << std::endl;
@@ -103,18 +116,18 @@ void UI::updatePreference(std::string key) {
 
 		try {
 			if (value == "back") {
-				return displayMenu(preferencesMenu);
+				return displayMenu(returnMenu);
 			}
 			
 			if (value == "" || value.size() == 0) throw std::exception(); // TODO: In future, check if within min/max range if applicable
 
 			sm.setPreference(key, value);
-			return displayMenu(preferencesMenu);
+			return displayMenu(returnMenu);
 		}
 		catch (std::exception e) {
 			std::cout << "Invalid value. Press enter to dismiss" << std::endl;
 			_getch();
-			return updatePreference(key); // Try again
+			return updatePreference(key, returnMenu); // Try again
 		}
 		return displayMenu(mainMenu);
 	}

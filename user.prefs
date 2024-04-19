@@ -7,6 +7,10 @@
         "type": "int",
         "value": 2
     },
+    "precipitation": {
+        "type": "bool",
+        "value": true
+    },
     "precipitationUnit": {
         "allowedValues": [
             "mm",
@@ -30,7 +34,7 @@
             "fahrenheit"
         ],
         "type": "string",
-        "value": "celsius"
+        "value": "fahrenheit"
     },
     "timeFormat": {
         "allowedValues": [
@@ -72,17 +76,5 @@
         ],
         "type": "string",
         "value": "mph"
-    },
-    "multiselectExample": {
-        "allowedValues": [
-            "item1",
-            "item2",
-            "item3"
-        ],
-        "type": "list",
-        "value": [
-            "item1",
-            "item2"
-        ]
     }
 }
