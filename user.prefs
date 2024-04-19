@@ -1,7 +1,7 @@
 {
     "dailyAdvanced": {
         "type": "bool",
-        "value": true
+        "value": false
     },
     "forecastDays": {
         "type": "int",
@@ -9,7 +9,7 @@
     },
     "hourlyAdvanced": {
         "type": "bool",
-        "value": true
+        "value": false
     },
     "pastDays": {
         "type": "int",

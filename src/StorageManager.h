@@ -57,6 +57,9 @@ public:
 	std::list<std::string> getPrefAllowedValues(std::string key); // Returns a list of allowed values for a preference key.
 	std::string getPreferenceType(std::string key); // Returns the type of a preference key (string, int, float, bool, char, etc.)
 
+	// Type can be "hourly" or "daily", and all can be set to true to get all keys.
+	std::vector<std::string> getWeatherKeys(std::string type, bool all = false);
+
 private:
 	bool preferenceExists(std::string key); // Checks if a preference key exists in the file.
 };

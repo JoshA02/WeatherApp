@@ -135,6 +135,26 @@ std::string StorageManager::getPreferenceType(std::string key)
 	return data[key]["type"];
 }
 
+std::vector<std::string> StorageManager::getWeatherKeys(std::string type, bool all)
+{
+	std::ifstream file("weatherkeys.keyinfo");
+	if (!file.good()) throw PreferenceNotFoundException("weatherkeys.keyinfo");
+	
+	json data = json::parse(file);
+	file.close();
+	
+	if (data.find(type) == data.end()) throw PreferenceNotFoundException(type);
+	
+	if (all) {
+		if (data[type].find("all") == data[type].end()) return std::vector<std::string>();
+		return data[type]["all"].get<std::vector<std::string>>();
+	}
+	else {
+		if (data[type].find("basic") == data[type].end()) return std::vector<std::string>();
+		return data[type]["basic"].get<std::vector<std::string>>();
+	}
+}
+
 bool StorageManager::preferenceExists(std::string key)
 {
 	// Could utilize the getPreferenceType function to check if the key exists, but this is more efficient
