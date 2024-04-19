@@ -42,7 +42,8 @@ UI::UI()
 
 	dataPreferencesMenu = {
 		{"=== Data Preferences ===\nThese will only affect future searches", []() {}},
-		{"Include Precipitation - Currently (%PREF_precipitation%)\n", [&]() { updatePreference("precipitation", dataPreferencesMenu); }},
+		{"Hourly; Include Additional Variables  - Currently (%PREF_hourlyAdvanced%)", [&]() { updatePreference("hourlyAdvanced", dataPreferencesMenu); }},
+		{"Daily; Include Additional Variables  - Currently (%PREF_dailyAdvanced%)\n", [&]() { updatePreference("dailyAdvanced", dataPreferencesMenu); }},
 		{"Return to Preferences Menu", [&]() { displayMenu(preferencesMenu); }},
 		{"Go to Main Menu", [&]() { displayMenu(mainMenu); }}
 	};
@@ -207,10 +208,12 @@ void UI::dailyData(Location& l) {
 	cout << dailyDataHeader << endl;
 	cout << "Fetching data between " << dateRange.start.toString() << " and " << dateRange.end.toString() << "..." << endl;
 
-	API api;
 	vector<dayData> days;
 	try {
-		days = api.getDaysFromLocationAndRange(l, dateRange.start, dateRange.end); // Returns a data structure containing all the data for each day, including the hourly data for each day
+		days = l.getDaysInRange(dateRange.start, dateRange.end);
+
+
+		//days = api.getDaysFromLocationAndRange(l, dateRange.start, dateRange.end); // Returns a data structure containing all the data for each day, including the hourly data for each day
 		cout << "Found " << days.size() << " days worth of data!" << endl;
 	}
 	catch (invalid_argument e) {

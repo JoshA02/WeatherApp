@@ -1,15 +1,19 @@
 {
+    "dailyAdvanced": {
+        "type": "bool",
+        "value": true
+    },
     "forecastDays": {
         "type": "int",
         "value": 2
     },
+    "hourlyAdvanced": {
+        "type": "bool",
+        "value": true
+    },
     "pastDays": {
         "type": "int",
         "value": 2
-    },
-    "precipitation": {
-        "type": "bool",
-        "value": true
     },
     "precipitationUnit": {
         "allowedValues": [

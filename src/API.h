@@ -18,29 +18,6 @@ public:
 	}
 };
 
-struct WeatherUnits {
-	std::string tempUnit = "celsius";
-	std::string windSpeedUnit = "kmh";
-	std::string precipUnit = "mm";
-	std::string timeZone = "Europe/London";
-};
-
-struct weatherProperty {
-	std::string key;
-	std::string value;
-};
-
-struct hourData {
-	Time time;
-	std::vector<weatherProperty> keysAndValues;
-};
-
-struct dayData {
-	Date date;
-	std::vector<weatherProperty> dailyData;
-	std::vector<hourData> hourlyData;
-};
-
 
 class API
 {
@@ -70,7 +47,7 @@ public:
 	
 	// Returns each day requested, including the daily and hourly data
 	std::vector<dayData> getDaysFromLocationAndRange(Location& loc, Date startDate, Date endDate,
-		std::list<std::string> dailyKeysToInclude = {
+		std::vector<std::string> dailyKeysToInclude = {
 			"temperature_2m_max",
 			"temperature_2m_min",
 			"apparent_temperature_max",
@@ -78,7 +55,7 @@ public:
 			"sunrise",
 			"sunset"
 		},
-		std::list<std::string> hourlyKeysToInclude = {
+		std::vector<std::string> hourlyKeysToInclude = {
 			"temperature_2m",
 			"relative_humidity_2m"
 		}, std::string urlPrefix = "https://api.open-meteo.com/v1/forecast"

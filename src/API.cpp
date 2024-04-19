@@ -77,14 +77,19 @@ std::string API::getCurrentDataFromLocation(Location& loc)
 
 
 // Returns data for each day requested, including hourly data for each day.
-std::vector<dayData> API::getDaysFromLocationAndRange(Location& loc, Date startDate, Date endDate, std::list<std::string> dailyKeysToInclude, std::list<std::string> hourlyKeysToInclude, std::string urlPrefix){
+std::vector<dayData> API::getDaysFromLocationAndRange(Location& loc, Date startDate, Date endDate, std::vector<std::string> dailyKeysToInclude, std::vector<std::string> hourlyKeysToInclude, std::string urlPrefix){
     using namespace std;
 
     WeatherUnits units = getUserOptions();
 
     string urlLatLong = format("latitude={}&longitude={}", std::to_string(loc.getCoords().latitude), std::to_string(loc.getCoords().longitude));
-    string urlHourlyDataPoints = format("hourly=temperature_2m,relative_humidity_2m,dew_point_2m,apparent_temperature,precipitation_probability,precipitation,rain,showers,snowfall,snow_depth,weather_code,pressure_msl,surface_pressure,cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,visibility,evapotranspiration,et0_fao_evapotranspiration,vapour_pressure_deficit,wind_speed_10m,wind_speed_80m,wind_speed_120m,wind_speed_180m,wind_direction_10m,wind_direction_80m,wind_direction_120m,wind_direction_180m,wind_gusts_10m,temperature_80m,temperature_120m,temperature_180m,soil_temperature_0cm,soil_temperature_6cm,soil_temperature_18cm,soil_temperature_54cm,soil_moisture_0_to_1cm,soil_moisture_1_to_3cm,soil_moisture_3_to_9cm,soil_moisture_9_to_27cm,soil_moisture_27_to_81cm");
-    string urlDailyDataPoints = format("daily=temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,uv_index_max,rain_sum");
+    string urlHourlyDataPoints = "hourly=";
+    string urlDailyDataPoints = "daily=";
+
+    // Add the provided keys
+    for (int x = 0; x < hourlyKeysToInclude.size(); x++) urlHourlyDataPoints += (hourlyKeysToInclude[x] + (x == hourlyKeysToInclude.size() - 1 ? "" : ","));
+    for (int x = 0; x < dailyKeysToInclude.size(); x++) urlDailyDataPoints += (dailyKeysToInclude[x] + (x == dailyKeysToInclude.size() - 1 ? "" : ","));
+
     string urlOptions = format("temperature_unit={}&wind_speed_unit={}&precipitation_unit={}&timezone={}", units.tempUnit, units.windSpeedUnit, units.precipUnit, units.timeZone);
     string urlStartDate = format("start_date={}", startDate.toString("YYYY-MM-DD"));
     string urlEndDate = format("end_date={}", endDate.toString("YYYY-MM-DD"));
@@ -133,6 +138,10 @@ std::vector<dayData> API::getDaysFromLocationAndRange(Location& loc, Date startD
 
                 for (auto key : hourlyKeysToInclude) {
                     weatherProperty p;
+
+                    // Check if the key exists in hourlyData:
+                    if (hourlyData.find(key) == hourlyData.end()) continue;
+
                     json jsonValue = hourlyData[key][hourIndex];
                     if (jsonValue.is_null() && urlPrefix == "https://api.open-meteo.com/v1/forecast") return getDaysFromLocationAndRange(loc, startDate, endDate, dailyKeysToInclude, hourlyKeysToInclude, "https://archive-api.open-meteo.com/v1/archive"); // Try the historic API
                     p.key = responseNameToFriendly(key);
@@ -148,6 +157,9 @@ std::vector<dayData> API::getDaysFromLocationAndRange(Location& loc, Date startD
 
             for (auto key : dailyKeysToInclude) {
                 weatherProperty p;
+                // Check if the key exists in dailyDate:
+                if (dailyData.find(key) == dailyData.end()) continue;
+
                 p.key = responseNameToFriendly(key);
                 json jsonValue = dailyData[key][dayIndex];
                 if(jsonValue.is_null() && urlPrefix == "https://api.open-meteo.com/v1/forecast") return getDaysFromLocationAndRange(loc, startDate, endDate, dailyKeysToInclude, hourlyKeysToInclude, "https://archive-api.open-meteo.com/v1/archive"); // Try the historic API
@@ -213,9 +225,7 @@ WeatherUnits API::getUserOptions()
 
 std::string API::responseNameToFriendly(std::string name) {
     using namespace std;
-    for (char& c : name) {
-        std::tolower(c);
-    }
+    for (char& c : name) c = std::tolower(c);
 
 
 	std::unordered_map<std::string, std::string> friendlyNames = {

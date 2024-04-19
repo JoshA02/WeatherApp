@@ -1,7 +1,10 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 #pragma once
+
+
 class Date {
 public:
 	Date(int day, int month, int year) : day(day), month(month), year(year) {}
@@ -66,6 +69,29 @@ public:
 struct DateRange {
 	Date start;
 	Date end;
+};
+
+struct WeatherUnits {
+	std::string tempUnit = "celsius";
+	std::string windSpeedUnit = "kmh";
+	std::string precipUnit = "mm";
+	std::string timeZone = "Europe/London";
+};
+
+struct weatherProperty {
+	std::string key;
+	std::string value;
+};
+
+struct hourData {
+	Time time;
+	std::vector<weatherProperty> keysAndValues;
+};
+
+struct dayData {
+	Date date;
+	std::vector<weatherProperty> dailyData;
+	std::vector<hourData> hourlyData;
 };
 
 class Utils
