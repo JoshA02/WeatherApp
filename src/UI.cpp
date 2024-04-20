@@ -2,9 +2,11 @@
 #include <conio.h>
 #include "StorageManager.h"
 #include <list>
+#include <vector>
 #include <string>
 #include "Location.h"
 #include <API.h>
+#include <algorithm>
 
 UI::UI()
 {
@@ -12,7 +14,9 @@ UI::UI()
 
 	mainMenu = {
 		{"=== Main Menu ===", []() {}},
-		{"Favourite New Location", [&]() { displayMenu(preferencesMenu); }},
+		{"View Favourites", [&]() { showFavourites(); }},
+		{"Manage Favourites", [&]() { manageFavourites(); }},
+		{"Add Favourite", [&]() { addFavourite(); }},
 		{"Quick Search", [&]() { quickSearch(); } },
 		{"Preferences", [&]() { displayMenu(preferencesMenu); }},
 		{"Quit", [&]() { }}
@@ -104,10 +108,11 @@ void UI::updatePreference(std::string key, std::vector<MenuItem> returnMenu) {
 		std::string value;
 		std::cin >> value;
 
+		std::string valueLower = value;
+		for (char& c : valueLower) c = tolower(c);
+
 		try {
-			if (value == "back") {
-				return displayMenu(returnMenu);
-			}
+			if (valueLower == "back") return displayMenu(returnMenu);
 			
 			if (value == "" || value.size() == 0) throw std::exception(); // TODO: In future, check if within min/max range if applicable
 
@@ -147,11 +152,6 @@ void UI::quickSearch() {
 		Location loc = Location(locationName);
 
 		return locationData(loc);
-
-		//clearScreen();
-		//std::cout << "=== Quick Search ===" << std::endl << std::endl;
-		//std::cout << "Results for " << loc.getName() << ":" << std::endl << std::endl;
-		//std::cout << result << std::endl;
 	}
 	catch (LocationNotFoundException e) {
 		std::cout << "Location not found. Press enter to return to main menu" << std::endl;
@@ -353,4 +353,103 @@ void UI::historicData(Location& l) {
 	};
 
 	return displayMenu(historicMenu);
+}
+
+// Asks the user to search for a saved location by id/name. This function will call itself until the user provided a valid search query. If they type 'back', an invalid_arguement is thrown.
+Location UI::selectFavourite(std::string header, std::vector<MenuItem> menu) {
+	using namespace std;
+
+	clearScreen();
+	cout << header << endl;
+
+	StorageManager sm;
+	vector<Location> locs = sm.getStoredLocations();
+
+	for (auto loc : locs) cout << (loc.getName() + " (ID: " + loc.getId() + ")") << endl;
+
+	cout << endl << "'back' to go back" << endl << endl << "Select a location (by id or name): " << endl;
+
+	string query;
+	getline(cin >> ws, query);
+	for (char& c : query) c = tolower(c);
+	if (query == "back") throw invalid_argument("Return to menu");
+
+	for (Location loc : locs) {
+		string nameLower = loc.getName();
+		for (char& c : nameLower) c = tolower(c);
+
+		if (nameLower.starts_with(query))	return loc;	// Allow start of name to match
+		if (loc.getId() == query)			return loc;	// Match ID exactly
+	}
+
+	cout << "Invalid search query; no locations found." << endl << "Press enter to try again." << endl;
+	_getch();
+	return selectFavourite(header, menu);
+}
+
+void UI::showFavourites() {
+	using namespace std;
+	StorageManager sm;
+
+	clearScreen();
+
+	try {
+		Location l = selectFavourite("=== View Favourite Locations ===", mainMenu);
+		return locationData(l);
+	}
+	catch (invalid_argument e) {
+		return displayMenu(mainMenu);
+	}
+}
+
+void UI::manageFavourites() {
+	using namespace std;
+	StorageManager sm;
+
+	clearScreen();
+
+	try {
+		Location l = selectFavourite("=== Manage Favourite Locations ===", mainMenu);
+		vector<MenuItem> menu = {
+			{"=== Managing Favourite Location (name: " + l.getName() + " id: " + l.getId() + ") ===", []() {}},
+			{"Change Display Name", [&]() { changeFavouriteName(l); }},
+			{"Delete", [&]() {
+				StorageManager sm;
+				clearScreen();
+				if (sm.removeStoredLocation(l)) cout << "Removed location from favourites!" << endl << "Press enter to return to favourites menu" << endl;
+				else cout << "Could not remove location. Please try again later." << endl << "Press enter to return to favourites menu" << endl;
+				_getch();
+				return showFavourites();
+			}}
+		};
+
+		return displayMenu(menu);
+	}
+	catch (invalid_argument e) {
+		return displayMenu(mainMenu);
+	}
+}
+void UI::addFavourite()
+{
+	using namespace std;
+
+}
+void UI::changeFavouriteName(Location l) {
+	using namespace std;
+	StorageManager sm;
+	clearScreen();
+
+	cout << "=== Renaming Favourite Location (name: " << l.getName() << " id: " << l.getId() << " ===" << endl << endl;
+
+	cout << "New Name: ";
+
+	string newName;
+	getline(cin >> ws, newName);
+
+	Location newLocation = Location(l.getId(), newName, l.getCoords().latitude, l.getCoords().longitude);
+	clearScreen();
+	if (sm.updateStoredLocation(newLocation)) cout << "Name updated successfully!" << endl << "Press enter to return to favourites list" << endl;
+	else cout << "Name was not updated!" << endl << "Press enter to return to favourites list" << endl;
+	_getch();
+	return showFavourites();
 }

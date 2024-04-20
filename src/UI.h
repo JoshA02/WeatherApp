@@ -28,6 +28,13 @@ private:
 
 	void updatePreference(std::string key, std::vector<MenuItem>);
 	void quickSearch();
+	
+	Location selectFavourite(std::string header, std::vector<MenuItem> menu);
+	void showFavourites();
+	void manageFavourites();
+	void addFavourite();
+	void changeFavouriteName(Location l);
+	
 	void locationData(Location& l);
 	void dailyData(Location& l);
 	void forecastData(Location& l);

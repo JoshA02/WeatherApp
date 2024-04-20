@@ -1,7 +1,93 @@
 #include "StorageManager.h"
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <string>
+
+
 using json = nlohmann::json;
+
+std::vector<Location> StorageManager::getStoredLocations()
+{
+	using namespace std;
+	std::ifstream file("locations.data");
+	if (!file.good()) return std::vector<Location>();
+	
+	json data = json::parse(file);
+	file.close();
+	
+	// The root is an array of locations, each with an ID, name, latitude, and longitude.
+	if (!data.is_array()) return std::vector<Location>();
+	
+	std::vector<Location> locations;
+	for (auto& location : data) {
+		if (!location["id"].is_string()) continue;
+		if (!location["name"].is_string()) continue;
+		if (!location["latitude"].is_number()) continue;
+		if (!location["longitude"].is_number()) continue;
+
+		locations.push_back(Location(location["id"].get<string>(), location["name"].get<string>(), stod(location["latitude"].dump()), stod(location["longitude"].dump())));
+	}
+
+	return locations;
+}
+
+bool StorageManager::updateStoredLocation(Location& l)
+{
+	using namespace std;
+	std::ifstream file("locations.data");
+	if (!file.good()) return false;
+
+	json data = json::parse(file);
+	file.close();
+
+	// The root is an array of locations, each with an ID, name, latitude, and longitude.
+	if (!data.is_array()) return false;
+
+	bool found = false;
+	for (auto& location : data) {
+		if (!location["id"].is_string()) continue;
+		if (location["id"].get<string>() != l.getId()) continue;
+		location["name"] = l.getName();
+		location["latitude"] = l.getCoords().latitude;
+		location["longitude"] = l.getCoords().longitude;
+		found = true;
+		break;
+	}
+
+	std::ofstream out("locations.data");
+	out << data.dump(4);
+	out.close();
+	
+	return found;
+}
+
+bool StorageManager::removeStoredLocation(Location& l)
+{
+	using namespace std;
+	std::ifstream file("locations.data");
+	if (!file.good()) return false;
+
+	json data = json::parse(file);
+	file.close();
+
+	// The root is an array of locations, each with an ID, name, latitude, and longitude.
+	if (!data.is_array()) return false;
+
+	bool found = false;
+	for (auto it = data.begin(); it != data.end(); ++it) {
+		if (!(*it)["id"].is_string()) continue;
+		if ((*it)["id"].get<string>() != l.getId()) continue;
+		data.erase(it);
+		found = true;
+		break;
+	}
+
+	std::ofstream out("locations.data");
+	out << data.dump(4);
+	out.close();
+
+	return found;
+}
 
 std::string StorageManager::getPreference(std::string key)
 {	

@@ -1,7 +1,7 @@
 {
     "dailyAdvanced": {
         "type": "bool",
-        "value": true
+        "value": false
     },
     "forecastDays": {
         "type": "int",
@@ -9,7 +9,7 @@
     },
     "hourlyAdvanced": {
         "type": "bool",
-        "value": true
+        "value": false
     },
     "pastDays": {
         "type": "int",
@@ -69,7 +69,7 @@
         ],
         "message": "Valid time zones are: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones",
         "type": "string",
-        "value": "Europe/London"
+        "value": "America/Anchorage"
     },
     "windSpeedUnit": {
         "allowedValues": [

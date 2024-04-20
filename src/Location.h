@@ -17,10 +17,12 @@ struct latlong {
 class Location {
 public:
 	Location(std::string locName);
-	Location(int id);
+	//Location(int id);
+	Location(std::string _id, std::string locName, double lat, double lon);
 
-	latlong getCoords();
+	latlong getCoords() { return coords; }
 	std::string getName();
+	std::string getId() { return id; }
 
 	std::string getCurrentData();
 	std::string getDailyData(int day, int month, int year);
@@ -32,4 +34,5 @@ public:
 private:
 	std::string name;
 	latlong coords;
+	std::string id = "";
 };

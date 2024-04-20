@@ -49,8 +49,9 @@ public:
 	~StorageManager();*/
 
 	void storeLocation(Location& l); // Adds a location to the stored locations file, using its name and ID.
-	std::string getLocationNameById(int id); // Returns the name of a stored location by its ID. If the location is not found, an empty string is returned.
-	std::list<Location> getStoredLocationNames(); // Returns a list of all stored locations.
+	std::vector<Location> getStoredLocations(); // Returns a list of all stored locations.
+	bool updateStoredLocation(Location& l); // Updates a stored location with new data.
+	bool removeStoredLocation(Location& l); // Removes a location from the stored locations file.
 
 	std::string getPreference(std::string key); // Returns the value of a preference key as a string.
 	void setPreference(std::string key, std::string value); // Sets a preference key to a value, only if the key exists in the file already.

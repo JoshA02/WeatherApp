@@ -7,10 +7,7 @@ using json = nlohmann::json;
 
 Location::Location(std::string locName)
 {
-	for (char& c : locName)
-	{
-		c = tolower(c);
-	}
+	for (char& c : locName) c = tolower(c);
 
 	name = locName;
 	
@@ -18,14 +15,12 @@ Location::Location(std::string locName)
 	coords = api.getCoordsFromLocationName(locName);
 }
 
-Location::Location(int id)
+Location::Location(std::string _id, std::string locName, double lat, double lon)
 {
-	
-}
-
-latlong Location::getCoords()
-{
-	return coords;
+	id = _id;
+	name = locName;
+	coords.latitude = lat;
+	coords.longitude = lon;
 }
 
 std::string Location::getName()
