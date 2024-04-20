@@ -10,5 +10,11 @@
         "latitude": 33.0,
         "longitude": 66.0,
         "name": "Afghanistan"
+    },
+    {
+        "id": "41",
+        "latitude": 39.76,
+        "longitude": -98.5,
+        "name": "United states"
     }
 ]

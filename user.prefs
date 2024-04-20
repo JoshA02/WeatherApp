@@ -9,7 +9,10 @@
     },
     "hourlyAdvanced": {
         "type": "bool",
-        "value": false
+        "value": true
+    },
+    "intentionallyBrokenProperty": {
+        "value": "This property does not have a type, which is required. This is here for testing purposes."
     },
     "pastDays": {
         "type": "int",
@@ -69,7 +72,7 @@
         ],
         "message": "Valid time zones are: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones",
         "type": "string",
-        "value": "America/Anchorage"
+        "value": "Europe/London"
     },
     "windSpeedUnit": {
         "allowedValues": [
