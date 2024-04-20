@@ -22,8 +22,6 @@ private:
 	std::vector<MenuItem> preferencesMenu;
 	std::vector<MenuItem> dataPreferencesMenu;
 	
-	void displayMenuNoInput(std::vector<MenuItem> menuItems);
-	int getChoice(std::vector<MenuItem> menuItems);
 	void displayMenu(std::vector<MenuItem>);
 
 	void updatePreference(std::string key, std::vector<MenuItem>);
