@@ -137,16 +137,17 @@ void UI::updatePreference(std::string key, std::vector<MenuItem> returnMenu) {
 }
 
 void UI::quickSearch() {
+	using namespace std;
 	clearScreen();
-	std::cout << "=== Quick Search ===" << std::endl << std::endl;
+	cout << "=== Quick Search ===" << endl << endl;
 	
-	std::cout << "Enter location name: ";
-	std::string locationName;
-	std::cin >> locationName;
+	cout << "Enter location name: ";
+	string locationName;
+	getline(cin >> ws, locationName);
 
 	clearScreen();
-	std::cout << "=== Quick Search ===" << std::endl << std::endl;
-	std::cout << "Searching for " << locationName << "..." << std::endl << std::endl;
+	cout << "=== Quick Search ===" << endl << endl;
+	cout << "Searching for " << locationName << "..." << endl << endl;
 
 	try {
 		Location loc = Location(locationName);
@@ -154,7 +155,7 @@ void UI::quickSearch() {
 		return locationData(loc);
 	}
 	catch (LocationNotFoundException e) {
-		std::cout << "Location not found. Press enter to return to main menu" << std::endl;
+		cout << "Location not found. Press enter to return to main menu" << endl;
 		
 		_getch();
 		displayMenu(mainMenu);
@@ -432,7 +433,32 @@ void UI::manageFavourites() {
 void UI::addFavourite()
 {
 	using namespace std;
+	StorageManager sm;
 
+	clearScreen();
+	cout << "=== Add New Favourite Location ===" << std::endl << std::endl;
+
+	cout << "Enter location name (city, country, etc): ";
+	string locationName;
+	getline(cin >> ws, locationName);
+
+	clearScreen();
+	std::cout << "=== Add New Favourite Location ===" << std::endl << std::endl;
+	std::cout << "Searching for " << locationName << "..." << std::endl << std::endl;
+
+	try {
+		Location loc = Location(locationName);
+		clearScreen();
+		if (sm.storeLocation(loc)) cout << "Successfully added location to favourites!" << endl << "To update its name, manage your favourites from the main menu" << endl << "Press enter to return to main menu" << endl;
+		else cout << "Could not add location to favourites, please try again later." << endl << "Press enter to return to main menu" << endl;
+		_getch();
+		return displayMenu(mainMenu);
+	}
+	catch (LocationNotFoundException e) {
+		std::cout << "Location not found. Press enter to return to main menu" << std::endl;
+		_getch();
+		return displayMenu(mainMenu);
+	}
 }
 void UI::changeFavouriteName(Location l) {
 	using namespace std;

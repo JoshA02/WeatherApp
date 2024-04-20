@@ -1,8 +1,14 @@
 [
     {
-        "id": "1",
-        "latitude": 52.938636,
-        "longitude": -1.195158,
-        "name": "Nottingham (home)"
+        "id": "6334",
+        "latitude": 48.85341,
+        "longitude": 2.3488,
+        "name": "Paris"
+    },
+    {
+        "id": "6500",
+        "latitude": 33.0,
+        "longitude": 66.0,
+        "name": "Afghanistan"
     }
 ]

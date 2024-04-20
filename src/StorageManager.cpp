@@ -6,6 +6,52 @@
 
 using json = nlohmann::json;
 
+bool StorageManager::storeLocation(Location& l)
+{
+	using namespace std;
+	ifstream file("locations.data");
+	if (!file.good()) {
+		ofstream newFile("locations.data");
+		newFile << "[]";
+		newFile.close();
+		file.open("locations.data");
+	}
+	
+	json data = json::parse(file);
+	file.close();
+	
+	// The root is an array of locations, each with an ID, name, latitude, and longitude.
+	if (!data.is_array()) return false;
+	
+	// Random 4-digit ID. Check if it already exists. If it does, generate a new one.
+	string generatedId;
+	bool idExists = false;
+	do {
+		generatedId = to_string(rand() % 10000);
+		for (auto& location : data) {
+			idExists = true;
+			if (!location["id"].is_string() || location["id"].get<string>() != generatedId) idExists = false;
+		}
+	} while (idExists);
+
+	// Add the location to the array.
+	json newLocation = {
+		{"id", generatedId},
+		{"name", l.getName()},
+		{"latitude", l.getCoords().latitude},
+		{"longitude", l.getCoords().longitude}
+	};
+
+	data.push_back(newLocation);
+	
+	// Write the new data to the file.
+	ofstream outFile("locations.data");
+	outFile << data.dump(4);
+	outFile.close();
+	
+	return true;
+}
+
 std::vector<Location> StorageManager::getStoredLocations()
 {
 	using namespace std;

@@ -48,7 +48,7 @@ public:
 	/*StorageManager();
 	~StorageManager();*/
 
-	void storeLocation(Location& l); // Adds a location to the stored locations file, using its name and ID.
+	bool storeLocation(Location& l); // Adds a location to the stored locations file, using its name and ID.
 	std::vector<Location> getStoredLocations(); // Returns a list of all stored locations.
 	bool updateStoredLocation(Location& l); // Updates a stored location with new data.
 	bool removeStoredLocation(Location& l); // Removes a location from the stored locations file.
