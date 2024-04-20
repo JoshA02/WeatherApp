@@ -22,14 +22,10 @@ UI::UI()
 		{"=== User Preferences ===\nThese will only affect future searches", []() {}},
 		{"Temperature Unit (%PREF_tempUnit%)", [&]() { updatePreference("tempUnit", preferencesMenu); }},
 		{"Wind Speed Unit (%PREF_windSpeedUnit%)", [&]() { updatePreference("windSpeedUnit", preferencesMenu); }},
-		{"Pressure Unit (%PREF_pressureUnit%)", [&]() { updatePreference("pressureUnit", preferencesMenu); }},
 		{"Precipitation Unit (%PREF_precipitationUnit%)", [&]() { updatePreference("precipitationUnit", preferencesMenu); }},
-		{"Time Format (%PREF_timeFormat%)", [&]() { updatePreference("timeFormat", preferencesMenu); }},
-		{"Past Days (%PREF_pastDays%)", [&]() { updatePreference("pastDays", preferencesMenu); }},
-		{"Forecast Days (%PREF_forecastDays%)", [&]() { updatePreference("forecastDays", preferencesMenu); }},
-		{"Time Zone (%PREF_timeZone%)\n", [&]() { updatePreference("timeZone", preferencesMenu); }},
-		{"Data Preferences", [&]() { displayMenu(dataPreferencesMenu); }},
-		// TODO: Implement the multiselect example. This type of preference will be used for picking which hourly/daily variables you want. User can type the num of the one they want to toggle to toggle it.
+		{"Time Zone (%PREF_timeZone%)", [&]() { updatePreference("timeZone", preferencesMenu); }},
+		{"Data Preferences\n", [&]() { displayMenu(dataPreferencesMenu); }},
+
 		{"Go to Main Menu", [&]() { displayMenu(mainMenu); }}
 	};
 
