@@ -1,7 +1,7 @@
 {
     "dailyAdvanced": {
         "type": "bool",
-        "value": false
+        "value": true
     },
     "forecastDays": {
         "type": "int",
@@ -9,7 +9,7 @@
     },
     "hourlyAdvanced": {
         "type": "bool",
-        "value": false
+        "value": true
     },
     "pastDays": {
         "type": "int",
@@ -38,7 +38,7 @@
             "fahrenheit"
         ],
         "type": "string",
-        "value": "fahrenheit"
+        "value": "celsius"
     },
     "timeFormat": {
         "allowedValues": [

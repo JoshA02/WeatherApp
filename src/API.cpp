@@ -165,6 +165,9 @@ std::vector<dayData> API::getDaysFromLocationAndRange(Location& loc, Date startD
                 if(jsonValue.is_null() && urlPrefix == "https://api.open-meteo.com/v1/forecast") return getDaysFromLocationAndRange(loc, startDate, endDate, dailyKeysToInclude, hourlyKeysToInclude, "https://archive-api.open-meteo.com/v1/archive"); // Try the historic API
                 if (!jsonValue.is_string()) p.value = jsonValue.dump();
                 else p.value = jsonValue.get<std::string>();
+
+                if (key == "sunrise" || key == "sunset") p.value = Time(p.value).toString();
+
                 if (!ignoreUnit(key)) p.value = p.value + dailyUnitsJson[key].get<std::string>();
                 day.dailyData.push_back(p);
             }

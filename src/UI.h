@@ -19,7 +19,6 @@ private:
 	};
 
 	std::vector<MenuItem> mainMenu;
-	std::vector<MenuItem> secondMenu;
 	std::vector<MenuItem> preferencesMenu;
 	std::vector<MenuItem> dataPreferencesMenu;
 	

@@ -15,14 +15,7 @@ UI::UI()
 		{"Favourite New Location", [&]() { displayMenu(preferencesMenu); }},
 		{"Quick Search", [&]() { quickSearch(); } },
 		{"Preferences", [&]() { displayMenu(preferencesMenu); }},
-		{"Go to Second Menu", [&]() { displayMenu(secondMenu); }},
 		{"Quit", [&]() { }}
-	};
-
-	secondMenu = {
-		{"=== Second Menu ===", []() {}},
-		{"Option 1", []() { std::cout << "You selected option 1" << std::endl; }},
-		{"Go to Main Menu", [&]() { displayMenu(mainMenu); }}
 	};
 	
 	preferencesMenu = {
@@ -184,9 +177,9 @@ void UI::locationData(Location& l)
 	
 	std::vector<MenuItem> locationMenu = {
 		{"=== Current Data for " + l.getName() + " ===" + "\n\n" + result, []() {}}, // Because the first line isn't considered an option by displayMenu
-		{"View Daily Data", [&]() { dailyData(l); }},
-		{"View Forecast", [&]() { forecastData(l); }},
-		{"View Historic Data", [&]() { historicData(l); }},
+		{"View Daily & Hourly Data", [&]() { dailyData(l); }},
+		//{"View Forecast", [&]() { forecastData(l); }},
+		//{"View Historic Data", [&]() { historicData(l); }},
 		{"Go back", [&]() { displayMenu(mainMenu); }}
 	};
 	
