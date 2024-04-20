@@ -184,6 +184,8 @@ std::vector<dayData> API::getDaysFromLocationAndRange(Location& loc, Date startD
 latlong API::getCoordsFromLocationName(std::string name) {
     using namespace std::string_literals;
     using json = nlohmann::json;
+    
+	std::replace(name.begin(), name.end(), ' ', '+');
 
     auto url = "https://geocoding-api.open-meteo.com/v1/search?name=" + name + "&count=1&language=en&format=json";
     latlong ll = {};
