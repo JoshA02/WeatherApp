@@ -51,3 +51,14 @@ static BOOST_AUTO_TEST_CASE(locationCoordsTest)
 	BOOST_CHECK_CLOSE(api.getCoordsFromLocationName("sydney").latitude, -33.8688, 0.1);
 	BOOST_CHECK_CLOSE(api.getCoordsFromLocationName("sydney").longitude, 151.2093, 0.1);
 }
+BOOST_AUTO_TEST_CASE(renameStoredLocationTest) {
+	StorageManager sm;
+	sm.getStoredLocations();
+	auto loc = sm.getStoredLocations()[0]; // Grab the first stored location
+	
+	Location newLoc(loc.getId(), "test", loc.getCoords().latitude, loc.getCoords().longitude); // Create a temporary new location with the updated name
+	BOOST_CHECK_NO_THROW(sm.updateStoredLocation(newLoc)); // Update the stored location with the new location
+	
+	auto updatedLoc = sm.getStoredLocations()[0]; // Grab the first stored location again
+	BOOST_CHECK_EQUAL(updatedLoc.getName(), "Test"); // Check that the name has been updated, and is now capitalized
+}

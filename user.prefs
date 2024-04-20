@@ -3,13 +3,22 @@
         "type": "bool",
         "value": false
     },
+    "domain": {
+        "allowedValues": [
+            "cams_global",
+            "cams_europe",
+            "both"
+        ],
+        "type": "string",
+        "value": "both"
+    },
     "forecastDays": {
         "type": "int",
         "value": 2
     },
     "hourlyAdvanced": {
         "type": "bool",
-        "value": true
+        "value": false
     },
     "intentionallyBrokenProperty": {
         "value": "This property does not have a type, which is required. This is here for testing purposes."

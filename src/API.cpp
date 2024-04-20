@@ -43,12 +43,27 @@ std::string API::getCurrentDataFromLocation(Location& loc)
     string urlOptions = format("temperature_unit={}&wind_speed_unit={}&precipitation_unit={}&timezone={}", units.tempUnit, units.windSpeedUnit, units.precipUnit, units.timeZone);
     auto url = std::format("https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&current=temperature_2m,relative_humidity_2m,precipitation,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m&", std::to_string(loc.getCoords().latitude), std::to_string(loc.getCoords().longitude));
     url += urlOptions;
+    
+    string airUrlOptions = format("latitude={}&longitude={}&current=european_aqi,us_aqi,ozone,dust,uv_index&timezone={}", to_string(loc.getCoords().latitude), to_string(loc.getCoords().longitude), units.timeZone);
+    airUrlOptions += (units.domain != "both" ? format("&domains={}", units.domain) : "");
+	auto airUrl = "https://air-quality-api.open-meteo.com/v1/air-quality?" + airUrlOptions;
 
     try {
         auto jsonString = get_response(url);
+        auto airJsonString = get_response(airUrl);
 
         auto j = json::parse(jsonString.str());
-        //std::cout << j.dump(4) << std::endl;
+        auto airJ = json::parse(airJsonString.str());
+
+		// Merge j and airJ
+		for (auto& [key, value] : airJ["current"].items()) {
+			if (j["current"].find(key) != j["current"].end()) continue;
+			j["current"][key] = value;
+		}
+        for (auto& [key, value] : airJ["current_units"].items()) {
+            if (j["current_units"].find(key) != j["current_units"].end()) continue;
+            j["current_units"][key] = value;
+        }
 
         // Get the 'results' json array
         auto results = j["current"];
@@ -60,6 +75,7 @@ std::string API::getCurrentDataFromLocation(Location& loc)
 
         for (auto& [key, value] : results.items()) {
             if (ignoreKey(key)) continue;
+            if (results[key].is_null()) value = "N/A";
             const std::string thisUnit = ignoreUnit(key) ? "" : unitsJson[key].get<std::string>();
             string valueStr = value.is_string() ? value.get<string>() : value.dump();
             if (key == "time") valueStr = Date(results[key].get<string>()).toString() + " - " + Time(results[key].get<string>()).toString();
@@ -218,12 +234,12 @@ latlong API::getCoordsFromLocationName(std::string name) {
 WeatherUnits API::getUserOptions()
 {
     StorageManager sm;
-    // TODO: Ask the StorageManager for the data.
     WeatherUnits units;
     units.precipUnit = sm.getPreference("precipitationUnit");
     units.tempUnit = sm.getPreference("tempUnit");
     units.windSpeedUnit = sm.getPreference("windSpeedUnit");
     units.timeZone = sm.getPreference("timeZone");
+    units.domain = sm.getPreference("domain");
 
     return units;
 };
@@ -286,7 +302,12 @@ std::string API::responseNameToFriendly(std::string name) {
         {"wind_speed_10m_max", "Max Wind Speed (10m)"},
         {"wind_gusts_10m_max", "Max Wind Speed (10m)"},
         {"wind_direction_10m_dominant", "Dominant Wind Direction (10m)"},
-        {"shortwave_radiation_sum", "Shortwave Radiation (sum)"}
+        {"shortwave_radiation_sum", "Shortwave Radiation (sum)"},
+        {"european_aqi", "European Air Quality Index"},
+        {"us_aqi", "US Air Quality Index" },
+        {"uv_index", "UV Index" },
+        {"precipitation_probability", "Precipitation Probability" },
+        {"apparent_temperature", "Apparent Temperature" }
 	};
 	if (friendlyNames.find(name) == friendlyNames.end()) {
 		name[0] = toupper(name[0]); // Can't find it so just capitalize the first letter and hope it looks okay.

@@ -76,6 +76,7 @@ struct WeatherUnits {
 	std::string windSpeedUnit = "kmh";
 	std::string precipUnit = "mm";
 	std::string timeZone = "Europe/London";
+	std::string domain = "cams_europe";
 };
 
 struct weatherProperty {

@@ -28,6 +28,7 @@ UI::UI()
 		{"Wind Speed Unit (%PREF_windSpeedUnit%)", [&]() { updatePreference("windSpeedUnit", preferencesMenu); }},
 		{"Precipitation Unit (%PREF_precipitationUnit%)", [&]() { updatePreference("precipitationUnit", preferencesMenu); }},
 		{"Time Zone (%PREF_timeZone%)", [&]() { updatePreference("timeZone", preferencesMenu); }},
+		{"Domain - used for air quality (%PREF_domain%)", [&]() { updatePreference("domain", preferencesMenu); }},
 		{"Data Preferences\n", [&]() { displayMenu(dataPreferencesMenu); }},
 
 		{"Go to Main Menu", [&]() { displayMenu(mainMenu); }}
