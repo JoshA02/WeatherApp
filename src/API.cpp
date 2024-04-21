@@ -41,7 +41,7 @@ std::string API::getCurrentDataFromLocation(Location& loc)
     WeatherUnits units = getUserOptions();
 
     string urlOptions = format("temperature_unit={}&wind_speed_unit={}&precipitation_unit={}&timezone={}", units.tempUnit, units.windSpeedUnit, units.precipUnit, units.timeZone);
-    auto url = std::format("https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&current=temperature_2m,relative_humidity_2m,precipitation,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m&", std::to_string(loc.getCoords().latitude), std::to_string(loc.getCoords().longitude));
+    auto url = std::format("https://api.open-meteo.com/v1/forecast?latitude={}&longitude={}&current=temperature_2m,relative_humidity_2m,precipitation,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m,is_day&", std::to_string(loc.getCoords().latitude), std::to_string(loc.getCoords().longitude));
     url += urlOptions;
     
     string airUrlOptions = format("latitude={}&longitude={}&current=european_aqi,us_aqi,ozone,dust,uv_index&timezone={}", to_string(loc.getCoords().latitude), to_string(loc.getCoords().longitude), units.timeZone);
@@ -79,6 +79,7 @@ std::string API::getCurrentDataFromLocation(Location& loc)
             const std::string thisUnit = ignoreUnit(key) ? "" : unitsJson[key].get<std::string>();
             string valueStr = value.is_string() ? value.get<string>() : value.dump();
             if (key == "time") valueStr = Date(results[key].get<string>()).toString() + " - " + Time(results[key].get<string>()).toString();
+            if (key == "is_day") valueStr = valueStr == "0" ? "Night" : "Day";
             
             ss << responseNameToFriendly(key) << ": " << valueStr << thisUnit << "\n";
         }
@@ -307,7 +308,8 @@ std::string API::responseNameToFriendly(std::string name) {
         {"us_aqi", "US Air Quality Index" },
         {"uv_index", "UV Index" },
         {"precipitation_probability", "Precipitation Probability" },
-        {"apparent_temperature", "Apparent Temperature" }
+        {"apparent_temperature", "Apparent Temperature" },
+        {"is_day", "Currently Day or Night?" }
 	};
 	if (friendlyNames.find(name) == friendlyNames.end()) {
 		name[0] = toupper(name[0]); // Can't find it so just capitalize the first letter and hope it looks okay.

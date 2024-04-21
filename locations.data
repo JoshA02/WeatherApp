@@ -16,5 +16,11 @@
         "latitude": 39.76,
         "longitude": -98.5,
         "name": "United states"
+    },
+    {
+        "id": "8467",
+        "latitude": 35.6895,
+        "longitude": 139.69171,
+        "name": "Tokyo"
     }
 ]
