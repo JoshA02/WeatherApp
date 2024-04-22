@@ -1,26 +1,50 @@
 [
     {
-        "id": "6334",
-        "latitude": 48.85341,
-        "longitude": 2.3488,
-        "name": "Test"
-    },
-    {
         "id": "6500",
         "latitude": 33.0,
         "longitude": 66.0,
         "name": "Afghanistan"
     },
     {
-        "id": "41",
-        "latitude": 39.76,
-        "longitude": -98.5,
-        "name": "United states"
-    },
-    {
         "id": "8467",
         "latitude": 35.6895,
         "longitude": 139.69171,
         "name": "Tokyo"
+    },
+    {
+        "id": "4483",
+        "latitude": -33.86785,
+        "longitude": 151.20732,
+        "name": "Sydney"
+    },
+    {
+        "id": "4528",
+        "latitude": 35.6895,
+        "longitude": 139.69171,
+        "name": "Tokyo"
+    },
+    {
+        "id": "4538",
+        "latitude": 53.33306,
+        "longitude": -6.24889,
+        "name": "Dublin"
+    },
+    {
+        "id": "4568",
+        "latitude": 52.9536,
+        "longitude": -1.15047,
+        "name": "Nottingham"
+    },
+    {
+        "id": "0325",
+        "latitude": 34.05223,
+        "longitude": -118.24368,
+        "name": "Los angeles"
+    },
+    {
+        "id": "0462",
+        "latitude": 35.19807,
+        "longitude": -111.65127,
+        "name": "Flagstaff"
     }
 ]

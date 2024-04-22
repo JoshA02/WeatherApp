@@ -27,10 +27,17 @@ bool StorageManager::storeLocation(Location& l)
 	string generatedId;
 	bool idExists = false;
 	do {
-		generatedId = to_string(rand() % 10000);
+		srand(time(NULL));
+		int random = rand() % 10000;
+		generatedId = to_string(random);
+		while (generatedId.length() < 4) generatedId = "0" + generatedId; // Adds trailing 0s
 		for (auto& location : data) {
-			idExists = true;
-			if (!location["id"].is_string() || location["id"].get<string>() != generatedId) idExists = false;
+			idExists = false;
+			
+			if (location["id"].is_string() && location["id"].get<string>() == generatedId) {
+				idExists = true;
+				break;
+			}
 		}
 	} while (idExists);
 

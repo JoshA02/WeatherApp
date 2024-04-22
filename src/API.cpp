@@ -309,7 +309,8 @@ std::string API::responseNameToFriendly(std::string name) {
         {"uv_index", "UV Index" },
         {"precipitation_probability", "Precipitation Probability" },
         {"apparent_temperature", "Apparent Temperature" },
-        {"is_day", "Currently Day or Night?" }
+        {"is_day", "Currently Day or Night?" },
+        {"temperature_2m_mean", "Mean Temperature" }
 	};
 	if (friendlyNames.find(name) == friendlyNames.end()) {
 		name[0] = toupper(name[0]); // Can't find it so just capitalize the first letter and hope it looks okay.
