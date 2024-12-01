@@ -1,0 +1,9 @@
+{
+  "dependencies": [
+    "curl",
+    "curlcpp",
+    "fmt",
+    "nlohmann-json",
+    "boost-test"
+  ]
+}

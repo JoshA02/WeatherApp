@@ -33,3 +33,6 @@
 
 .vs/
 build/
+
+makefile
+CMakeUserPresets.json

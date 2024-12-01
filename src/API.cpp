@@ -1,10 +1,10 @@
 #include "API.h"
 #include <sstream>
 #include <nlohmann/json.hpp>
-#include "curl_easy.h"
-#include "curl_form.h"
-#include "curl_ios.h"
-#include "curl_exception.h"
+#include <curlcpp/curl_easy.h>
+#include <curlcpp/curl_form.h>
+#include <curlcpp/curl_ios.h>
+#include <curlcpp/curl_exception.h>
 #include <algorithm>
 #include "StorageManager.h"
 

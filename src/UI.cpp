@@ -1,11 +1,12 @@
 #include "UI.h"
-#include <conio.h>
+// #include <conio.h>
 #include "StorageManager.h"
 #include <list>
 #include <vector>
 #include <string>
+#include <sstream>
 #include "Location.h"
-#include <API.h>
+#include "API.h"
 #include <algorithm>
 
 UI::UI()
@@ -79,7 +80,7 @@ void UI::displayMenu(std::vector<MenuItem> menuItems) {
 	catch (std::exception e) {
 		//std::cout << e.what() << std::endl;
 		std::cout << "Invalid choice. Press enter to dismiss" << std::endl;
-		_getch();
+		int ch = std::cin.get();
 		displayMenu(menuItems);
 	}
 }
@@ -122,7 +123,7 @@ void UI::updatePreference(std::string key, std::vector<MenuItem> returnMenu) {
 		}
 		catch (std::exception e) {
 			std::cout << "Invalid value. Press enter to dismiss" << std::endl;
-			_getch();
+			int ch = std::cin.get();
 			return updatePreference(key, returnMenu); // Try again
 		}
 		return displayMenu(mainMenu);
@@ -158,7 +159,7 @@ void UI::quickSearch() {
 	catch (LocationNotFoundException e) {
 		cout << "Location not found. Press enter to return to main menu" << endl;
 		
-		_getch();
+		int ch = std::cin.get();
 		displayMenu(mainMenu);
 
 		return;
@@ -209,13 +210,13 @@ void UI::dailyData(Location& l) {
 	}
 	catch (invalid_argument e) {
 		cout << e.what() << endl << "Press enter to try again" << endl;
-		_getch();
+		int ch = std::cin.get();
 		return dailyData(l);
 	}
 	
 	if (days.size() == 0) {
 		cout << "No data found. Hit enter to try again." << endl;
-		_getch();
+		int ch = std::cin.get();
 		return dailyData(l);
 	}
 
@@ -237,14 +238,14 @@ DateRange UI::askForDateRange() {
 	// 1 - Check that the length is 10
 	if (startDateInput.length() != 10 || endDateInput.length() != 10) {
 		std::cout << "Invalid date(s). Press enter to try again" << std::endl;
-		_getch();
+		int ch = std::cin.get();
 		return askForDateRange();
 	}
 
 	// 2 - Check that the 2nd and 5th characters are '-'
 	if (startDateInput[2] != '-' || startDateInput[5] != '-' || endDateInput[2] != '-' || endDateInput[5] != '-') {
 		std::cout << "Invalid date(s). Press enter to try again" << std::endl;
-		_getch();
+		int ch = std::cin.get();
 		return askForDateRange();
 	}
 
@@ -260,7 +261,7 @@ DateRange UI::askForDateRange() {
 	}
 	catch (std::invalid_argument e) {
 		std::cout << "Invalid date(s). Press enter to try again" << std::endl;
-		_getch();
+		int ch = std::cin.get();
 		return askForDateRange();
 	}
 
@@ -272,7 +273,7 @@ DateRange UI::askForDateRange() {
 
 	if (!Utils::validateDate(range.start) || !Utils::validateDate(range.end)) {
 		std::cout << "Invalid date(s). Press enter to try again" << std::endl;
-		_getch();
+		int ch = std::cin.get();
 		return askForDateRange();
 	}
 
@@ -385,7 +386,7 @@ Location UI::selectFavourite(std::string header, std::vector<MenuItem> menu) {
 	}
 
 	cout << "Invalid search query; no locations found." << endl << "Press enter to try again." << endl;
-	_getch();
+	int ch = std::cin.get();
 	return selectFavourite(header, menu);
 }
 
@@ -420,7 +421,7 @@ void UI::manageFavourites() {
 				clearScreen();
 				if (sm.removeStoredLocation(l)) cout << "Removed location from favourites!" << endl << "Press enter to return to favourites menu" << endl;
 				else cout << "Could not remove location. Please try again later." << endl << "Press enter to return to favourites menu" << endl;
-				_getch();
+				int ch = std::cin.get();
 				return showFavourites();
 			}}
 		};
@@ -452,12 +453,12 @@ void UI::addFavourite()
 		clearScreen();
 		if (sm.storeLocation(loc)) cout << "Successfully added location to favourites!" << endl << "To update its name, manage your favourites from the main menu" << endl << "Press enter to return to main menu" << endl;
 		else cout << "Could not add location to favourites, please try again later." << endl << "Press enter to return to main menu" << endl;
-		_getch();
+		int ch = std::cin.get();
 		return displayMenu(mainMenu);
 	}
 	catch (LocationNotFoundException e) {
 		std::cout << "Location not found. Press enter to return to main menu" << std::endl;
-		_getch();
+		int ch = std::cin.get();
 		return displayMenu(mainMenu);
 	}
 }
@@ -477,6 +478,6 @@ void UI::changeFavouriteName(Location l) {
 	clearScreen();
 	if (sm.updateStoredLocation(newLocation)) cout << "Name updated successfully!" << endl << "Press enter to return to favourites list" << endl;
 	else cout << "Name was not updated!" << endl << "Press enter to return to favourites list" << endl;
-	_getch();
+	int ch = std::cin.get();
 	return showFavourites();
 }

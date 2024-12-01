@@ -18,7 +18,7 @@
     },
     "hourlyAdvanced": {
         "type": "bool",
-        "value": false
+        "value": true
     },
     "intentionallyBrokenProperty": {
         "value": "This property does not have a type, which is required. This is here for testing purposes."
@@ -50,7 +50,7 @@
             "fahrenheit"
         ],
         "type": "string",
-        "value": "celsius"
+        "value": "fahrenheit"
     },
     "timeFormat": {
         "allowedValues": [
