@@ -36,3 +36,5 @@ build/
 
 makefile
 CMakeUserPresets.json
+
+/temp
