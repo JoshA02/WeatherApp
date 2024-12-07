@@ -37,4 +37,6 @@ build/
 makefile
 CMakeUserPresets.json
 
-/temp
+/temp_coverage_output
+
+*.DS_Store

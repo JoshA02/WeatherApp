@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(locationNameTest)
 	
 	BOOST_CHECK_EQUAL(Location("uNItED KinGDoM").getName(), "United kingdom"); // The name should be capitalized.
 }
-static BOOST_AUTO_TEST_CASE(locationCoordsTest)
+BOOST_AUTO_TEST_CASE(locationCoordsTest)
 {
 	API api;
 	Location london("London");

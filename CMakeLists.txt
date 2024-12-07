@@ -33,3 +33,14 @@ target_include_directories(WeatherAppTest PRIVATE ${SRC_DIR})
 target_link_libraries(WeatherAppTest PRIVATE nlohmann_json curlcpp::curlcpp curl Boost::boost)
 target_compile_definitions(WeatherAppTest PRIVATE TEST_MODE)
 target_compile_options(WeatherAppTest PRIVATE -fprofile-arcs -ftest-coverage)
+
+# Custom target for generating code coverage
+set(COVERAGE_OUTPUT_DIR ${CMAKE_SOURCE_DIR}/temp_coverage_output)
+file(MAKE_DIRECTORY ${COVERAGE_OUTPUT_DIR})
+file(MAKE_DIRECTORY ${COVERAGE_OUTPUT_DIR}/results)
+add_custom_target(
+    coverage
+    COMMAND lcov -c -d ${CMAKE_SOURCE_DIR} -o ${COVERAGE_OUTPUT_DIR}/coverage.info --ignore-errors inconsistent --rc derive_function_end_line=0
+    COMMAND lcov --remove ${COVERAGE_OUTPUT_DIR}/coverage.info --output-file ${COVERAGE_OUTPUT_DIR}/filtered_coverage.info '*/vcpkg_installed/*' '/usr/lib/*' '/usr/include/*' '*.h' --rc derive_function_end_line=0 || true
+    COMMAND genhtml -o ${COVERAGE_OUTPUT_DIR}/results ${COVERAGE_OUTPUT_DIR}/filtered_coverage.info --rc derive_function_end_line=0 --ignore-errors category
+)

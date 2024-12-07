@@ -50,7 +50,7 @@
             "fahrenheit"
         ],
         "type": "string",
-        "value": "fahrenheit"
+        "value": "celsius"
     },
     "timeFormat": {
         "allowedValues": [
@@ -91,6 +91,6 @@
             "knots"
         ],
         "type": "string",
-        "value": "mph"
+        "value": "knots"
     }
 }
