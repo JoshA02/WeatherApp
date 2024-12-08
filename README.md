@@ -7,7 +7,7 @@
 ## Running
 1) Create the makefile via `cmake --preset=default`.
 2) Build the project with `cmake --build build`.
-3) Execute the regular program via `./build/WeatherApp`, or the unit tests with `./build/WeatherAppTest`.
+3) Execute the regular program via `./build/WeatherApp`, or the unit tests with `./build/WeatherAppTest --log_level=message`.
 
 ## Checking Coverage
 1) Upon compiling and executing the test application (`./build/WeatherAppTest`), run `cmake --build build --target coverage`.

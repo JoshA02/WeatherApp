@@ -62,3 +62,36 @@ BOOST_AUTO_TEST_CASE(renameStoredLocationTest) {
 	auto updatedLoc = sm.getStoredLocations()[0]; // Grab the first stored location again
 	BOOST_CHECK_EQUAL(updatedLoc.getName(), "Test"); // Check that the name has been updated, and is now capitalized
 }
+BOOST_AUTO_TEST_CASE(renameStoredLocationAutomatedTest) {
+	
+	for(int i = 0; i < 20; i++) {
+		BOOST_TEST_MESSAGE("renameStoredLocationAutomatedTest - Attempt: " << i);
+		StorageManager sm;
+		sm.getStoredLocations();
+		auto loc = sm.getStoredLocations()[0]; // Grab the first stored location
+		
+		int randSeed = std::chrono::system_clock::now().time_since_epoch().count();
+		BOOST_TEST_MESSAGE("renameStoredLocationAutomatedTest - Seed: " << randSeed);
+		srand(randSeed);
+
+		std::string randomName;
+		for (int i = 0; i < 10; i++) {
+			randomName += (char)(rand() % 92 + 33); // Random ASCII character between 33 and 125 (! - })
+		}
+
+		BOOST_TEST_MESSAGE("renameStoredLocationAutomatedTest - Random name: " << randomName);
+
+		std::string randomNameCapitalized = randomName;
+		randomNameCapitalized[0] = toupper(randomNameCapitalized[0]);
+		for (int i = 1; i < randomNameCapitalized.size(); i++) {
+			randomNameCapitalized[i] = tolower(randomNameCapitalized[i]);
+		}
+
+
+		Location newLoc(loc.getId(), randomName, loc.getCoords().latitude, loc.getCoords().longitude); // Create a temporary new location with the updated name
+		BOOST_CHECK_NO_THROW(sm.updateStoredLocation(newLoc)); // Update the stored location with the new location
+		
+		auto updatedLoc = sm.getStoredLocations()[0]; // Grab the first stored location again
+		BOOST_CHECK_EQUAL(updatedLoc.getName(), randomNameCapitalized); // Check that the name has been updated, and is now capitalized
+	}
+}

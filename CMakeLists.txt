@@ -51,3 +51,11 @@ add_custom_target(
     COMMAND genhtml -o ${COVERAGE_OUTPUT_DIR}/results ${COVERAGE_OUTPUT_DIR}/filtered_coverage.info --rc derive_function_end_line=0 --ignore-errors category
     COMMAND ${CMAKE_COMMAND} -E echo "Code coverage generated. Open ${COVERAGE_OUTPUT_DIR}/results/index.html in a browser to view the results."
 )
+
+add_custom_target(
+    clean_coverage
+
+    COMMAND ${CMAKE_COMMAND} -E echo "Removing any existing .gcda and .gcno files..."
+    COMMAND find ${CMAKE_BINARY_DIR} -name "*.gcda" -exec rm -f {} +
+    COMMAND find ${CMAKE_BINARY_DIR} -name "*.gcno" -exec rm -f {} +
+)
