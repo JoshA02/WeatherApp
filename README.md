@@ -3,6 +3,7 @@
 ## Requirements
 - vcpkg
 - C++ 20
+- lcov, gcov, genhtml
 
 ## Running
 1) Create the makefile via `cmake --preset=default`.
