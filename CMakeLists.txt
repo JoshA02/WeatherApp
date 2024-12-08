@@ -40,7 +40,14 @@ file(MAKE_DIRECTORY ${COVERAGE_OUTPUT_DIR})
 file(MAKE_DIRECTORY ${COVERAGE_OUTPUT_DIR}/results)
 add_custom_target(
     coverage
+
+    COMMAND ${CMAKE_COMMAND} -E echo "Removing any existing .gcda and .gcno files..."
+    COMMAND find ${CMAKE_BINARY_DIR} -name "*.gcda" -exec rm -f {} +
+    COMMAND find ${CMAKE_BINARY_DIR} -name "*.gcno" -exec rm -f {} +
+
+    COMMAND ${CMAKE_COMMAND} -E echo "Generating code coverage..."
     COMMAND lcov -c -d ${CMAKE_SOURCE_DIR} -o ${COVERAGE_OUTPUT_DIR}/coverage.info --ignore-errors inconsistent --rc derive_function_end_line=0
     COMMAND lcov --remove ${COVERAGE_OUTPUT_DIR}/coverage.info --output-file ${COVERAGE_OUTPUT_DIR}/filtered_coverage.info '*/vcpkg_installed/*' '/usr/lib/*' '/usr/include/*' '*.h' --rc derive_function_end_line=0 || true
     COMMAND genhtml -o ${COVERAGE_OUTPUT_DIR}/results ${COVERAGE_OUTPUT_DIR}/filtered_coverage.info --rc derive_function_end_line=0 --ignore-errors category
+    COMMAND ${CMAKE_COMMAND} -E echo "Code coverage generated. Open ${COVERAGE_OUTPUT_DIR}/results/index.html in a browser to view the results."
 )
