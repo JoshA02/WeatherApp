@@ -5,6 +5,25 @@
 - C++ 20
 - lcov, gcov, genhtml
 
+## Setup
+1) Create a CMakeUserPresets.json file in the root directory of this project.
+2) Copy the following, replacing `"~/vcpkg"` with the path to your installation of vcpkg:
+```
+{
+  "version": 2,
+  "configurePresets": [
+    {
+      "name": "default",
+      "inherits": "vcpkg",
+      "environment": {
+        "VCPKG_ROOT": "~/vcpkg"
+      }
+    }
+  ]
+}
+```
+**For more info, visit https://learn.microsoft.com/en-us/vcpkg/get_started/get-started?pivots=shell-bash**
+
 ## Running
 1) Create the makefile via `cmake --preset=default`.
 2) Build the project with `cmake --build build`.
